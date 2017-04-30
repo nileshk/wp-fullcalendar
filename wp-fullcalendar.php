@@ -22,8 +22,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '1.2');
+define('WPFC_VERSION', '1.3');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
+
+// Include the required dependencies.
+require_once( 'vendor/autoload.php' );
 
 class WP_FullCalendar{
 	static $args = array();
@@ -155,66 +158,148 @@ class WP_FullCalendar{
 	    //maybe excessive, but easy sanitization of start/end query params
 	    $_REQUEST['start'] = $_POST['start'] = date('Y-m-d', strtotime($_REQUEST['start']));
 	    $_REQUEST['end'] = $_POST['end'] = date('Y-m-d', strtotime($_REQUEST['end']));
-	    $args = array ('scope'=>array($_REQUEST['start'], $_REQUEST['end']), 'owner'=>false, 'status'=>1, 'order'=>'ASC', 'orderby'=>'post_date','full'=>1);
-	    //get post type and taxonomies, determine if we're filtering by taxonomy
-	    $post_types = get_post_types(array('public'=>true),'names');
-	    $post_type = !empty($_REQUEST['type']) && in_array($_REQUEST['type'], $post_types) ? $_REQUEST['type']:get_option('wpfc_default_type');
-	    $args['post_type'] = $post_type;
-	    $args['post_status'] = 'publish'; //only show published status
-	    $args['posts_per_page'] = -1;
-	    if( $args['post_type'] == 'attachment' ) $args['post_status'] = 'inherit';
-	    $args['tax_query'] = array();
-	    foreach( get_object_taxonomies($post_type) as $taxonomy_name ){
-	        if( !empty($_REQUEST[$taxonomy_name]) ){
-		    	$args['tax_query'][] = array(
-					'taxonomy' => $taxonomy_name,
-					'field' => 'id',
-					'terms' => $_REQUEST[$taxonomy_name]
-				);
-	        }
-	    }
-	    //initiate vars
-	    $args = apply_filters('wpfc_fullcalendar_args', $args);
+
+		//initiate vars
 		$limit = get_option('wpfc_limit',3);
-	    $items = array();
-	    $item_dates_more = array();
-	    $item_date_counts = array();
-	    
-	    //Create our own loop here and tamper with the where sql for date ranges, as per http://codex.wordpress.org/Class_Reference/WP_Query#Time_Parameters
-	    function wpfc_temp_filter_where( $where = '' ) {
-	        global $wpdb;
-	    	$where .= $wpdb->prepare(" AND post_date >= %s AND post_date < %s", $_REQUEST['start'], $_REQUEST['end']);
-	    	return $where;
-	    }
-	    add_filter( 'posts_where', 'wpfc_temp_filter_where' );
-	    do_action('wpfc_before_wp_query');
-		$the_query = new WP_Query( $args );
-	    remove_filter( 'posts_where', 'wpfc_temp_filter_where' );
-	    //loop through each post and slot them into the array of posts to return to browser
-	    while ( $the_query->have_posts() ) { $the_query->the_post();
-	    	$color = "#a8d144";
-	    	$post_date = substr($post->post_date, 0, 10);
-	    	$post_timestamp = strtotime($post->post_date);
-	    	if( empty($item_date_counts[$post_date]) || $item_date_counts[$post_date] < $limit ){
-	    		$title = $post->post_title;
-	    		$item = array ("title" => $title, "color" => $color, "start" => date('Y-m-d\TH:i:s', $post_timestamp), "end" => date('Y-m-d\TH:i:s', $post_timestamp), "url" => get_permalink($post->ID), 'post_id' => $post->ID );
-	    		$items[] = apply_filters('wpfc_ajax_post', $item, $post);
-	    		$item_date_counts[$post_date] = (!empty($item_date_counts[$post_date]) ) ? $item_date_counts[$post_date]+1:1;
-	    	}elseif( empty($item_dates_more[$post_date]) ){
-	    		$item_dates_more[$post_date] = 1;
-	    		$day_ending = $post_date."T23:59:59";
-	    		//TODO archives not necesarrily working
-	    		$more_array = array ("title" => get_option('wpfc_limit_txt','more ...'), "color" => get_option('wpfc_limit_color','#fbbe30'), "start" => $day_ending, 'post_id' => 0, 'className' => 'wpfc-more');
-	    		global $wp_rewrite;
-	    		$archive_url = get_post_type_archive_link($post_type);
-	    		if( !empty($archive_url) || $post_type == 'post' ){ //posts do have archives
-	    		    $archive_url = trailingslashit($archive_url);
-		    		$archive_url .= $wp_rewrite->using_permalinks() ? date('Y/m/', $post_timestamp):'?m='.date('Ym', $post_timestamp);
-		    		$more_array['url'] = $archive_url;
-	    		}
-	    		$items[] = apply_filters('wpfc_ajax_more', $more_array, $post_date);
-	    	}
-	    }
+		$items = get_option('wpfc_facebook_events', array());
+		$item_dates_more = array();
+		$item_date_counts = array();
+
+		$color = "#a8d144";
+
+        $facebook_events_enabled = get_option('wpfc_facebook_group_events', false);
+		// TODO Fetch Facebook events again if it's been a while
+        // TODO Fetch Facebook events when a request param instructs to
+		if ($facebook_events_enabled && empty($items)) {
+			$fb_app_id            = get_option('wpfc_facebook_app_id');
+			$fb_app_secret        = get_option('wpfc_facebook_app_secret');
+			$fb_user_access_token = get_option('wpfc_facebook_access_token');
+			$fb_group_ids         = explode(',',get_option('wpfc_facebook_group_ids'));
+
+			$_SESSION['fb_access_token'] = $fb_user_access_token;
+
+			// Initialize the Facebook PHP SDK v5.
+			$fb = new Facebook\Facebook( [
+				'app_id'                => $fb_app_id,
+				'app_secret'            => $fb_app_secret,
+				'default_graph_version' => 'v2.3',
+				'default_access_token'  => $fb_user_access_token
+			] );
+
+			foreach($fb_group_ids as $fb_group_id) {
+				$fb_events = $fb->get( '/' . $fb_group_id . '/events', $fb_user_access_token );
+
+				$graph_edge = $fb_events->getGraphEdge();
+
+				foreach ( $graph_edge as $graph_node ) {
+					$event_name        = $graph_node['name'];
+					$event_description = $graph_node['description'];
+					$event_start_time  = $graph_node['start_time'];
+					$event_end_time    = $graph_node['end_time'];
+					$event_id          = $graph_node['id'];
+
+					$item    = array(
+						"title"       => $event_name,
+						"description" => $event_description,
+						"color"       => $color,
+                        "start"       => date( 'Y-m-d\TH:i:s', $event_start_time->getTimestamp() ),
+						"end"         => date( 'Y-m-d\TH:i:s', $event_end_time->getTimestamp() ),
+						"url"         => 'https://www.facebook.com/events/' . $event_id,
+						'event_id'    => $event_id
+					);
+					$items[] = apply_filters( 'wpfc_ajax_post', $item, $post );
+				}
+			}
+			update_option( 'wpfc_facebook_events', $items );
+		}
+
+		//echo json_encode(apply_filters('wpfc_ajax', $items));
+		//die();
+        if (get_option('wpfc_wordpress_events', false)) {
+	        $args = array( 'scope'   => array( $_REQUEST['start'], $_REQUEST['end'] ),
+	                       'owner'   => false,
+	                       'status'  => 1,
+	                       'order'   => 'ASC',
+	                       'orderby' => 'post_date',
+	                       'full'    => 1
+	        );
+	        //get post type and taxonomies, determine if we're filtering by taxonomy
+	        $post_types             = get_post_types( array( 'public' => true ), 'names' );
+	        $post_type              = ! empty( $_REQUEST['type'] ) && in_array( $_REQUEST['type'], $post_types ) ? $_REQUEST['type'] : get_option( 'wpfc_default_type' );
+	        $args['post_type']      = $post_type;
+	        $args['post_status']    = 'publish'; //only show published status
+	        $args['posts_per_page'] = - 1;
+	        if ( $args['post_type'] == 'attachment' ) {
+		        $args['post_status'] = 'inherit';
+	        }
+	        $args['tax_query'] = array();
+	        foreach ( get_object_taxonomies( $post_type ) as $taxonomy_name ) {
+		        if ( ! empty( $_REQUEST[ $taxonomy_name ] ) ) {
+			        $args['tax_query'][] = array(
+				        'taxonomy' => $taxonomy_name,
+				        'field'    => 'id',
+				        'terms'    => $_REQUEST[ $taxonomy_name ]
+			        );
+		        }
+	        }
+	        //initiate vars
+	        $args  = apply_filters( 'wpfc_fullcalendar_args', $args );
+	        $limit = get_option( 'wpfc_limit', 3 );
+	        //$items = array();
+	        $item_dates_more  = array();
+	        $item_date_counts = array();
+
+	        //Create our own loop here and tamper with the where sql for date ranges, as per http://codex.wordpress.org/Class_Reference/WP_Query#Time_Parameters
+	        function wpfc_temp_filter_where( $where = '' ) {
+		        global $wpdb;
+		        $where .= $wpdb->prepare( " AND post_date >= %s AND post_date < %s", $_REQUEST['start'], $_REQUEST['end'] );
+
+		        return $where;
+	        }
+
+	        add_filter( 'posts_where', 'wpfc_temp_filter_where' );
+	        do_action( 'wpfc_before_wp_query' );
+	        $the_query = new WP_Query( $args );
+	        remove_filter( 'posts_where', 'wpfc_temp_filter_where' );
+	        //loop through each post and slot them into the array of posts to return to browser
+	        while ( $the_query->have_posts() ) {
+		        $the_query->the_post();
+		        $color          = "#a8d144";
+		        $post_date      = substr( $post->post_date, 0, 10 );
+		        $post_timestamp = strtotime( $post->post_date );
+		        if ( empty( $item_date_counts[ $post_date ] ) || $item_date_counts[ $post_date ] < $limit ) {
+			        $title                          = $post->post_title;
+			        $item                           = array(
+				        "title"   => $title,
+				        "color"   => $color,
+				        "start"   => date( 'Y-m-d\TH:i:s', $post_timestamp ),
+				        "end"     => date( 'Y-m-d\TH:i:s', $post_timestamp ),
+				        "url"     => get_permalink( $post->ID ),
+				        'post_id' => $post->ID
+			        );
+			        $items[]                        = apply_filters( 'wpfc_ajax_post', $item, $post );
+			        $item_date_counts[ $post_date ] = ( ! empty( $item_date_counts[ $post_date ] ) ) ? $item_date_counts[ $post_date ] + 1 : 1;
+		        } elseif ( empty( $item_dates_more[ $post_date ] ) ) {
+			        $item_dates_more[ $post_date ] = 1;
+			        $day_ending                    = $post_date . "T23:59:59";
+			        //TODO archives not necesarrily working
+			        $more_array = array( "title"     => get_option( 'wpfc_limit_txt', 'more ...' ),
+			                             "color"     => get_option( 'wpfc_limit_color', '#fbbe30' ),
+			                             "start"     => $day_ending,
+			                             'post_id'   => 0,
+			                             'className' => 'wpfc-more'
+			        );
+			        global $wp_rewrite;
+			        $archive_url = get_post_type_archive_link( $post_type );
+			        if ( ! empty( $archive_url ) || $post_type == 'post' ) { //posts do have archives
+				        $archive_url       = trailingslashit( $archive_url );
+				        $archive_url       .= $wp_rewrite->using_permalinks() ? date( 'Y/m/', $post_timestamp ) : '?m=' . date( 'Ym', $post_timestamp );
+				        $more_array['url'] = $archive_url;
+			        }
+			        $items[] = apply_filters( 'wpfc_ajax_more', $more_array, $post_date );
+		        }
+	        }
+        }
 	    echo json_encode(apply_filters('wpfc_ajax', $items));
 	    die(); //normally we'd wp_reset_postdata();
 	}
@@ -224,7 +309,15 @@ class WP_FullCalendar{
 	 */
 	public static function qtip_content(){
 	    $content = '';
-		if( !empty($_REQUEST['post_id']) ){
+	    $event_id = $_REQUEST['event_id'];
+	    if (!empty($event_id)) {
+		    $items = get_option('wpfc_facebook_events', array());
+		    foreach ($items as $item) {
+		        if ($item['event_id'] == $event_id) {
+			        $content = '<div style="float:left; margin:0px 5px 5px 0px;">'.nl2br(htmlentities($item['description'])).'</div>'.$content;
+                }
+            }
+        } else if( !empty($_REQUEST['post_id']) ){
 	        $post = get_post($_REQUEST['post_id']);
 	        if( $post->post_type == 'attachment' ){
 	            $content = wp_get_attachment_image($post->ID, 'thumbnail');
@@ -238,6 +331,7 @@ class WP_FullCalendar{
     	        }
 	        }
 	    }
+
 		echo apply_filters('wpfc_qtip_content', $content);
 		die();
 	}

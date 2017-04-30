@@ -22,7 +22,7 @@ jQuery(document).ready( function($){
 				allDayDefault: false
 		}],
 	    eventRender: function(event, element) {
-			if( event.post_id > 0 && WPFC.wpfc_qtips == 1 ){
+			if( (event.post_id > 0 || event.event_id) && WPFC.wpfc_qtips == 1 ){
 				var event_data = { action : 'wpfc_qtip_content', post_id : event.post_id, event_id:event.event_id };
 				element.qtip({
 					content:{

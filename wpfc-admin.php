@@ -1,7 +1,7 @@
 <?php
 class WPFC_Admin {
 	public static function menus(){
-		$page = add_options_page('WP FullCalendar', 'WP FullCalendar', 'manage_options', 'wp-fullcalendar', array('WPFC_Admin','admin_options'));
+        $page = add_options_page('WP FullCalendar', 'WP FullCalendar', 'manage_options', 'wp-fullcalendar', array('WPFC_Admin','admin_options'));
 		wp_enqueue_style('wp-fullcalendar', plugins_url('includes/css/admin.css',__FILE__));
 	}
 
@@ -67,6 +67,15 @@ class WPFC_Admin {
 						</p>
 						<form action="" class="wpfc-options" method="post">
 							<?php do_action('wpfc_admin_before_options'); ?>
+                            <h2 style="margin-top:0px;"><?php _e( 'Calendar Sources', 'wp-fullcalendar' ); ?></h2>
+                            <table class='form-table'>
+                                <?php
+                                wpfc_options_radio_binary( __( 'Wordpress Events?', 'wp-fullcalendar' ), 'wpfc_wordpress_events', __( 'This enables getting events from Wordpress posts', 'wp-fullcalendar' ) );
+                                ?>
+                                <?php
+                                wpfc_options_radio_binary( __( 'Facebook Group Events?', 'wp-fullcalendar' ), 'wpfc_facebook_group_events', __( 'This enables getting events from Facebook Groups', 'wp-fullcalendar' ) );
+                                ?>
+                            </table>
 							<h2 style="margin-top:0px;"><?php _e('Post Types','wp-fullcalendar'); ?></h2>
 							<p><?php echo sprintf(__('By default, your calendar will show the types of posts based on settings below.','wp-fullcalendar'),''); ?></p>
 							<p>
@@ -110,7 +119,16 @@ class WPFC_Admin {
 					            	});
 					            });
 				            </script>
-							<?php do_action('wpfc_admin_after_cpt_options'); ?>
+                            <h2><?php _e( 'Facebook Settings', 'wp-fullcalendar' ); ?></h2>
+                            <table>
+								<?php
+								wpfc_options_input_text ( __( 'App ID', 'wp-fullcalendar'), 'wpfc_facebook_app_id', 'Facebook App ID', '' );
+								wpfc_options_input_text ( __( 'App Secret', 'wp-fullcalendar'), 'wpfc_facebook_app_secret', 'Facebook App Secret', '' );
+								wpfc_options_input_text ( __( 'Access Token', 'wp-fullcalendar'), 'wpfc_facebook_access_token', 'Facebook User Access Token', '' );
+								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-seperated list). These will be numbers.', '' );
+								?>
+                            </table>
+                            <?php do_action('wpfc_admin_after_cpt_options'); ?>
 						    <h2><?php _e('Calendar Options','wp-fullcalendar'); ?></h2>
 							<table class='form-table'>
 								<?php 

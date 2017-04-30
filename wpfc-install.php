@@ -15,6 +15,13 @@ add_option('wpfc_qtips_image_h',75);
 add_option('wpfc_timeFormat', 'h(:mm)A');
 add_option('wpfc_defaultView', 'month');
 add_option('wpfc_available_views', array('month','basicWeek','basicDay'));
+add_option('wpfc_facebook_events', array());
+add_option('wpfc_wordpress_events', false);
+add_option('wpfc_facebook_group_events', false); // True to enable Facebook Group Events
+add_option('wpfc_facebook_app_id', '');
+add_option('wpfc_facebook_app_secret', '');
+add_option('wpfc_facebook_access_token', '');
+add_option('wpfc_facebook_group_ids', '');
 
 //make a change to the theme
 if( version_compare( get_option('wpfc_version'), '1.0.2') ){
