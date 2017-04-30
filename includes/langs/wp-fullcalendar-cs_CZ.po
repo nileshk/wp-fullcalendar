@@ -1,0 +1,227 @@
+# Translation of WP Fullcalendar in Czech
+# This file is distributed under the same license as the WP Fullcalendar package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2015-02-23 13:53:29+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: GlotPress/1.0-alpha-1000\n"
+"Project-Id-Version: WP Fullcalendar\n"
+
+#: wp-fullcalendar.php:307
+msgid "Settings"
+msgstr "Nastavení"
+
+#: wpfc-admin.php:62
+msgid "To use this plugin, simply use the %s shortcode in one of your posts or pages."
+msgstr "Pro použití pluginu jednoduše použijte %s shortcode v jednom z vašich příspěvků nebo stránek."
+
+#: wpfc-admin.php:63
+msgid "You can also do this with PHP and this snippet : %s."
+msgstr ""
+
+#: wpfc-admin.php:66
+msgid "Post Types"
+msgstr "Typy příspěvku"
+
+#: wpfc-admin.php:67
+msgid "By default, your calendar will show the types of posts based on settings below."
+msgstr "Ve výchozím stavu bude váš kalendář zobrazovat typy příspěvků na základě nastavení uvedeném níže."
+
+#: wpfc-admin.php:69
+msgid "You can override these settings by choosing your post type in your shortode like this %s."
+msgstr ""
+
+#: wpfc-admin.php:70
+msgid "You can override taxonomy search settings as well like this %s."
+msgstr ""
+
+#: wpfc-admin.php:71
+msgid "In both cases, the values you should use are in (parenteses) below."
+msgstr ""
+
+#: wpfc-admin.php:86
+msgid "Choose which taxonomies you want to see listed as search options on the calendar."
+msgstr ""
+
+#: wpfc-admin.php:109
+msgid "Calendar Options"
+msgstr "Nastavení kalendáře"
+
+#: wpfc-admin.php:113
+msgid "Events limit"
+msgstr "Limit událostí"
+
+#: wpfc-admin.php:113
+msgid "Enter the maximum number of events to show per day, which will then be preceded by a link to the calendar day page."
+msgstr "Zadejte maximální počet událostí k zobrazení v jednom dni, které budou předcházet odkazem na stránku dne kalendáře."
+
+#: wpfc-admin.php:114
+msgid "View events link"
+msgstr "Zobrazit odkaz událostí"
+
+#: wpfc-admin.php:114
+msgid "When the limit of events is shown for one day, this text will be used for the link to the calendar day page."
+msgstr ""
+
+#: wpfc-admin.php:117
+msgid "jQuery UI Themeroller"
+msgstr ""
+
+#: wpfc-admin.php:118
+msgid "You can select from a set of pre-made CSS themes, which are taken from the <a href=\"%s\">jQuery Theme Roller</a> gallery. If you roll your own theme, upload the CSS file and images folder to <code>wp-content/yourtheme/plugins/wp-fullcalendar/</code> and refresh this page, it should appear an option in the pull down menu below."
+msgstr ""
+
+#: wpfc-admin.php:135
+msgid "jQuery CSS Theme?"
+msgstr "jQuery CSS šablona?"
+
+#: wpfc-admin.php:138
+msgid "No Theme"
+msgstr "Žádná šablona"
+
+#: wpfc-admin.php:139
+msgid "Built-In"
+msgstr "Vestavěné"
+
+#: wpfc-admin.php:145
+msgid "Custom"
+msgstr "Vlastní"
+
+#: wpfc-admin.php:152
+msgid "You can use the jQuery UI CSS framework to style the calendar, and choose from a set of themes below."
+msgstr ""
+
+#: wpfc-admin.php:156
+msgid "Toolips"
+msgstr "Popisky"
+
+#: wpfc-admin.php:157
+msgid "You can use <a href=\"http://craigsworks.com/projects/qtip2/\">jQuery qTips</a> to show excerpts of your events within a tooltip when hovering over a specific event on the calendar. You can control the content shown, positioning and style of the tool tips below."
+msgstr ""
+
+#: wpfc-admin.php:160
+msgid "Enable event tooltips?"
+msgstr "Povolit popisky události?"
+
+#: wpfc-admin.php:165
+msgid "Tooltip style"
+msgstr "Styl popisku"
+
+#: wpfc-admin.php:165
+msgid "You can choose from one of these preset styles for your tooltip."
+msgstr "Můžete si vybrat jeden z těchto přednastavených stylů pro popisek."
+
+#: wpfc-admin.php:166
+msgid "Rounded tooltips?"
+msgstr "Zaoblené popisky?"
+
+#: wpfc-admin.php:166
+msgid "If your chosen tooltip style doesn't already do/prevent this, you can add rounded corners using CSS3."
+msgstr ""
+
+#: wpfc-admin.php:167
+msgid "Add shadow to tooltips?"
+msgstr "Přidat stín k popisku"
+
+#: wpfc-admin.php:167
+msgid "If your chosen tooltip style doesn't already do/prevent this, you can add a CSS3 drop-shadow effect to your tooltip."
+msgstr ""
+
+#: wpfc-admin.php:172
+msgid "Tooltip pointer position"
+msgstr "Umístění kurzoru popisku"
+
+#: wpfc-admin.php:172
+msgid "Choose where the pointer will be situated on your tooltip."
+msgstr "Vyberte, kam na událost bude ukazatel směřovat."
+
+#: wpfc-admin.php:173
+msgid "Tooltip bubble position"
+msgstr "Umístění bubliny popisku"
+
+#: wpfc-admin.php:173
+msgid "Choose where your tooltip will be situated relative to the event link which triggers the tooltip."
+msgstr ""
+
+#: wpfc-admin.php:174
+msgid "Enable featured image?"
+msgstr "Povolit náhledový obrázek?"
+
+#: wpfc-admin.php:174
+msgid "If your post has a featured image, it will be included as a thumbnail."
+msgstr "Pokud mají vaše příspěvky náhledový obrázek, bude tento obrázek použit jako náhled."
+
+#: wpfc-admin.php:177
+msgid "Featured image size"
+msgstr "Velikost náhledového obrázku"
+
+#: wpfc-admin.php:179
+msgid "Width"
+msgstr "Šířka"
+
+#: wpfc-admin.php:180
+msgid "Height"
+msgstr "Šířka"
+
+#: wpfc-admin.php:185
+msgid "Submit Changes"
+msgstr "Potvrdit změny"
+
+#: wpfc-admin.php:264
+msgid "No"
+msgstr "Ne"
+
+#: wpfc-admin.php:264
+msgid "Yes"
+msgstr "Ano"
+
+#: wpfc-events-manager.php:54
+msgid "If you choose the Event post type whilst Events Manager is activated, you can also visit the <a href=\"%s\">Events Manager settings page</a> for a few more options when displaying event information on your calendar."
+msgstr ""
+
+#: wpfc-events-manager.php:322
+msgid "Click to toggle"
+msgstr "Klikněte pro přepnutí"
+
+#: wpfc-events-manager.php:322
+msgid "Full Calendar Options"
+msgstr "Nastavení Full Calendar"
+
+#: wpfc-events-manager.php:324
+msgid "Looking for the rest of the FullCalendar Options? They've moved <a href=\"%s\">here</a>, the options below are for overriding specific bits relevant to Events Manager."
+msgstr ""
+
+#: wpfc-events-manager.php:328
+msgid "Override calendar on events page?"
+msgstr "Přepsat kalendář na stránce událostí?"
+
+#: wpfc-events-manager.php:328
+msgid "If set to yes, the FullCalendar will be used instead of the standard calendar on the events page."
+msgstr "Pokud je nastaveno ano, FullCalendar bude použit na stránce událostí místo standardního kalendáře ."
+
+#: wpfc-events-manager.php:329
+msgid "Override calendar shortcode?"
+msgstr "Přepsat shortcode kalendáře?"
+
+#: wpfc-events-manager.php:329
+msgid "Overrides the default calendar shortcode. You can also use [events_fullcalendar] instead."
+msgstr "Přepsat výchozí shortcode kalendáře. Můžete také použít [events_fullcalendar]."
+
+#: wpfc-events-manager.php:330
+msgid "Event title format"
+msgstr "Formát názvu události"
+
+#: wpfc-events-manager.php:330
+msgid "HTML is not accepted."
+msgstr "HTML není akceptován"
+
+#: wpfc-events-manager.php:331
+msgid "Event tooltips format"
+msgstr "Formát popisků události"
+
+#: wpfc-events-manager.php:331
+msgid "If you enable tips, this information will be shwon, which can include HTML."
+msgstr ""

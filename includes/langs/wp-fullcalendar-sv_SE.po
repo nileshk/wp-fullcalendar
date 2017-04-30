@@ -1,0 +1,227 @@
+# Translation of WP Fullcalendar in Swedish
+# This file is distributed under the same license as the WP Fullcalendar package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2013-05-22 00:51:12+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/1.0-alpha-1000\n"
+"Project-Id-Version: WP Fullcalendar\n"
+
+#: wp-fullcalendar.php:307
+msgid "Settings"
+msgstr "Inställningar"
+
+#: wpfc-admin.php:62
+msgid "To use this plugin, simply use the %s shortcode in one of your posts or pages."
+msgstr "För att använda detta plugin behöver du bara ange shortcoden %s i en post eller på en sida."
+
+#: wpfc-admin.php:63
+msgid "You can also do this with PHP and this snippet : %s."
+msgstr "Du kan också göra detta med PHP och denna kodrad: %s."
+
+#: wpfc-admin.php:66
+msgid "Post Types"
+msgstr "Posttyper"
+
+#: wpfc-admin.php:67
+msgid "By default, your calendar will show the types of posts based on settings below."
+msgstr "Ställ in vilken typ av poster din kalender ska visa."
+
+#: wpfc-admin.php:69
+msgid "You can override these settings by choosing your post type in your shortode like this %s."
+msgstr "Du kan åsidosätta denna inställning genom att välja din posttyp i kortkoden såhär %s."
+
+#: wpfc-admin.php:70
+msgid "You can override taxonomy search settings as well like this %s."
+msgstr "Du kan även åsidosätta sökinställningar för taxonomier såhär %s."
+
+#: wpfc-admin.php:71
+msgid "In both cases, the values you should use are in (parenteses) below."
+msgstr "I båda fallen står värdena du ska använda i (paranteser) nedan."
+
+#: wpfc-admin.php:86
+msgid "Choose which taxonomies you want to see listed as search options on the calendar."
+msgstr "Välj vilka taxonomier du vill se listade bland sökinställningarna i kalendern."
+
+#: wpfc-admin.php:109
+msgid "Calendar Options"
+msgstr "Kalenderinställningar"
+
+#: wpfc-admin.php:113
+msgid "Events limit"
+msgstr "Eventgräns"
+
+#: wpfc-admin.php:113
+msgid "Enter the maximum number of events to show per day, which will then be preceded by a link to the calendar day page."
+msgstr "Ange det maximala antalet events som ska visas per dag. Dessa kommer sedan att föregås utav en länk till den kalenderdag-sidan."
+
+#: wpfc-admin.php:114
+msgid "View events link"
+msgstr "Visa eventlänk"
+
+#: wpfc-admin.php:114
+msgid "When the limit of events is shown for one day, this text will be used for the link to the calendar day page."
+msgstr "När gränsen för events visas för en dag kommer denna text att användas för länken till kalenderdagsidan."
+
+#: wpfc-admin.php:117
+msgid "jQuery UI Themeroller"
+msgstr "jQuery UI Temaroller"
+
+#: wpfc-admin.php:118
+msgid "You can select from a set of pre-made CSS themes, which are taken from the <a href=\"%s\">jQuery Theme Roller</a> gallery. If you roll your own theme, upload the CSS file and images folder to <code>wp-content/yourtheme/plugins/wp-fullcalendar/</code> and refresh this page, it should appear an option in the pull down menu below."
+msgstr "Du kan välja från en uppsättning färdiga CSS-teman, som tas från <a href=\"%s\">jQuery Tema Rollern</a>. Om du gjort ett eget tema, ladda upp CSS-filen och tillhörande bildmapp till <code> wp-content/yourtheme/plugins/wp-fullcalendar/</code> och uppdatera den här sidan. Den kommer då att komma upp som ett alternativ i rullgardinsmenyn nedan ."
+
+#: wpfc-admin.php:135
+msgid "jQuery CSS Theme?"
+msgstr "jQuery CSS-tema?"
+
+#: wpfc-admin.php:138
+msgid "No Theme"
+msgstr "Inget tema"
+
+#: wpfc-admin.php:139
+msgid "Built-In"
+msgstr "Inbyggt"
+
+#: wpfc-admin.php:145
+msgid "Custom"
+msgstr "Anpassad"
+
+#: wpfc-admin.php:152
+msgid "You can use the jQuery UI CSS framework to style the calendar, and choose from a set of themes below."
+msgstr "Du kan använda jQuery UI CSS-ramverket för att styla kalendern och välja ifrån ett antal teman nedan."
+
+#: wpfc-admin.php:156
+msgid "Toolips"
+msgstr "Verktygstips"
+
+#: wpfc-admin.php:157
+msgid "You can use <a href=\"http://craigsworks.com/projects/qtip2/\">jQuery qTips</a> to show excerpts of your events within a tooltip when hovering over a specific event on the calendar. You can control the content shown, positioning and style of the tool tips below."
+msgstr "Du kan använda <a href=\"http://craigsworks.com/projects/qtip2/\">jQuery qTips</a> för att visa korta utdrag av eventen i ett verktygstips när du håller muspekaren över det. Du kan styra innehållet, positionen och utseendet på detta verktygstips nedan."
+
+#: wpfc-admin.php:160
+msgid "Enable event tooltips?"
+msgstr "Aktivera verktygstips för event?"
+
+#: wpfc-admin.php:165
+msgid "Tooltip style"
+msgstr "Stil på verktygstipsen"
+
+#: wpfc-admin.php:165
+msgid "You can choose from one of these preset styles for your tooltip."
+msgstr "Du kan välja bland dessa färdiginställda stilar för verktygstipsen"
+
+#: wpfc-admin.php:166
+msgid "Rounded tooltips?"
+msgstr "Avrundade verktygstips?"
+
+#: wpfc-admin.php:166
+msgid "If your chosen tooltip style doesn't already do/prevent this, you can add rounded corners using CSS3."
+msgstr "Om din valda verktygstipsstil inte redan gör/förbjuder detta så kan du ange att den ska ha rundade kanter med hjälp utav CSS3."
+
+#: wpfc-admin.php:167
+msgid "Add shadow to tooltips?"
+msgstr "Lägg till skugga på verktygstipsen?"
+
+#: wpfc-admin.php:167
+msgid "If your chosen tooltip style doesn't already do/prevent this, you can add a CSS3 drop-shadow effect to your tooltip."
+msgstr "Om ditt valda verktygstips inte redan hanterar eller förbjuder detta så kan du lägga till en skuggeffekt mha CSS3 här."
+
+#: wpfc-admin.php:172
+msgid "Tooltip pointer position"
+msgstr "Markörens läge för verktygstipset"
+
+#: wpfc-admin.php:172
+msgid "Choose where the pointer will be situated on your tooltip."
+msgstr "Välj var markören i verktygstipset ska placeras."
+
+#: wpfc-admin.php:173
+msgid "Tooltip bubble position"
+msgstr "Vertygstipsets position"
+
+#: wpfc-admin.php:173
+msgid "Choose where your tooltip will be situated relative to the event link which triggers the tooltip."
+msgstr "Välj var verktygstipset ska hamna relativt till eventlänken som triggar det."
+
+#: wpfc-admin.php:174
+msgid "Enable featured image?"
+msgstr "Aktivera utvald bild?"
+
+#: wpfc-admin.php:174
+msgid "If your post has a featured image, it will be included as a thumbnail."
+msgstr "Om din post har en utvald bild satt kommer den att inkluderas som en tumnagel."
+
+#: wpfc-admin.php:177
+msgid "Featured image size"
+msgstr "Storlek på utvald bild"
+
+#: wpfc-admin.php:179
+msgid "Width"
+msgstr "Bredd"
+
+#: wpfc-admin.php:180
+msgid "Height"
+msgstr "Höjd"
+
+#: wpfc-admin.php:185
+msgid "Submit Changes"
+msgstr "Spara ändringar"
+
+#: wpfc-admin.php:264
+msgid "No"
+msgstr "Nej"
+
+#: wpfc-admin.php:264
+msgid "Yes"
+msgstr "Ja"
+
+#: wpfc-events-manager.php:54
+msgid "If you choose the Event post type whilst Events Manager is activated, you can also visit the <a href=\"%s\">Events Manager settings page</a> for a few more options when displaying event information on your calendar."
+msgstr "Om Events Manager är aktiverat och inställt på att använda Event-posttyper (standard) kan du också besöka <a href=\"%s\">Events Manager inställningssida</a> för ett par extrainställningar angående hur eventinformation ska visas i din kalender."
+
+#: wpfc-events-manager.php:322
+msgid "Click to toggle"
+msgstr "Klicka för att växla"
+
+#: wpfc-events-manager.php:322
+msgid "Full Calendar Options"
+msgstr "Inställningar för full kalender"
+
+#: wpfc-events-manager.php:324
+msgid "Looking for the rest of the FullCalendar Options? They've moved <a href=\"%s\">here</a>, the options below are for overriding specific bits relevant to Events Manager."
+msgstr "Letar du efter resten av FullCalendar-inställningarna? De har flyttat <a href=\"%s\">hit</a>. Inställningarna nedan är för att åsidosätta vissa specifika delar som är relevanta för Events Manager."
+
+#: wpfc-events-manager.php:328
+msgid "Override calendar on events page?"
+msgstr "Åsidosätt kalender på events-sidan?"
+
+#: wpfc-events-manager.php:328
+msgid "If set to yes, the FullCalendar will be used instead of the standard calendar on the events page."
+msgstr "Om du sätter denna till ja kommer den fulla kalendern att användas istället för standardkalendern på eventsidorna."
+
+#: wpfc-events-manager.php:329
+msgid "Override calendar shortcode?"
+msgstr "Åsidosätt kortkod för kalender?"
+
+#: wpfc-events-manager.php:329
+msgid "Overrides the default calendar shortcode. You can also use [events_fullcalendar] instead."
+msgstr "Åsidosätter kalenderns standardkortkod. Du kan också använda [events_fullcalendar] istället."
+
+#: wpfc-events-manager.php:330
+msgid "Event title format"
+msgstr "Format på eventrubrik"
+
+#: wpfc-events-manager.php:330
+msgid "HTML is not accepted."
+msgstr "HTML är inte tillåtet."
+
+#: wpfc-events-manager.php:331
+msgid "Event tooltips format"
+msgstr "Format på eventens verktygstips"
+
+#: wpfc-events-manager.php:331
+msgid "If you enable tips, this information will be shwon, which can include HTML."
+msgstr "Aktivera för att visa den här informationen (kan inkludera HTML)."
