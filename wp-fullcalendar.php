@@ -24,9 +24,14 @@ GNU General Public License for more details.
 
 define('WPFC_VERSION', '1.3');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
+define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 
 // Include the required dependencies.
 require_once( 'vendor/autoload.php' );
+
+use Ical\Feed;
+use Ical\Component\Calendar;
+use Ical\Component\Event;
 
 class WP_FullCalendar{
 	static $args = array();
@@ -315,6 +320,7 @@ class WP_FullCalendar{
 			foreach ($items as $item) {
 				if ($item['event_id'] == $event_id) {
 					$content = '<div style="float:left; margin:0px 5px 5px 0px;">'.nl2br(htmlentities($item['description'])).'</div>'.$content;
+					break;
 				}
 			}
 		} else if( !empty($_REQUEST['post_id']) ){
@@ -414,8 +420,49 @@ class WP_FullCalendar{
 		</script>
 		<?php
 	}
+
+	public static function wpfc_filter_query_vars( $vars ) {
+		if ( isset( $_GET[ WPFC_QUERY_VARIABLE ] ) ) {
+			$event_id = $_GET[ WPFC_QUERY_VARIABLE ];
+
+			$items = get_option('wpfc_facebook_events', array());
+			foreach ($items as $item) {
+				if ($item['event_id'] == $event_id) {
+
+					// One feed (i.e. URL) can host more than one calendar, lets create a feed
+					$feed = new Feed();
+
+					// This calendar will contain our events
+					$calendar = new Calendar( 'wpfc-ical//v1' );
+
+					$event = new Event( 'uid-1@example' );
+					//$event->created( new DateTime( '2015-01-01' ) );
+					//$event->lastModified( new DateTime( '2015-01-05' ) );
+					$event->between( new DateTime( $item['start'] ), new DateTime( $item['end'] ) );
+					$event->summary( $item['title'] );
+					$event->description( $item['description'] );
+					$event->allDay( false ); // TODO set this
+					//$event->url( $item['url'] );
+
+					// Add this event to the calendar
+					$calendar->addEvent( $event );
+
+					// Add the calendar to the feed
+					$feed->addCalendar( $calendar );
+
+					// Output the feed with appropriate HTTP header
+					$feed->download('facebook-event-'.$event_id.'.ics');
+					die();
+				}
+				break;
+			}
+		}
+
+		return $vars;
+	}
 }
 add_action('plugins_loaded',array('WP_FullCalendar','init'), 100);
+add_filter('query_vars', array('WP_FullCalendar', 'wpfc_filter_query_vars'));
 
 // action links
 add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'wpfc_settings_link', 10, 1);
