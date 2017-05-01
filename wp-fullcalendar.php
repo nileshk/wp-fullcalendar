@@ -442,7 +442,7 @@ class WP_FullCalendar{
 					$event->summary( $item['title'] );
 					$event->description( $item['description'] );
 					$event->allDay( false ); // TODO set this
-					//$event->url( $item['url'] );
+					$event->url( $item['url'] );
 
 					// Add this event to the calendar
 					$calendar->addEvent( $event );

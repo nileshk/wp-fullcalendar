@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "64c553ede850793b6cd138c340cfc944",
+    "content-hash": "76043c0e6988b98e1c8b2a3c4886a8c9",
     "packages": [
         {
             "name": "facebook/graph-sdk",
@@ -66,16 +66,16 @@
         },
         {
             "name": "rb-cohen/ical-php",
-            "version": "1.0.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/rb-cohen/ical-php.git",
-                "reference": "d041dc3aba67b4924c0a54ba19196ff88fc19f1f"
+                "url": "https://github.com/nileshk/ical-php.git",
+                "reference": "821ddb38408c79e7a7d48bccb7a6158f11064cdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rb-cohen/ical-php/zipball/d041dc3aba67b4924c0a54ba19196ff88fc19f1f",
-                "reference": "d041dc3aba67b4924c0a54ba19196ff88fc19f1f",
+                "url": "https://api.github.com/repos/nileshk/ical-php/zipball/821ddb38408c79e7a7d48bccb7a6158f11064cdb",
+                "reference": "821ddb38408c79e7a7d48bccb7a6158f11064cdb",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,6 @@
                     "Ical": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -101,13 +100,18 @@
                 }
             ],
             "description": "Generate an iCal file by providing event objects",
-            "time": "2016-08-17T08:56:29+00:00"
+            "support": {
+                "source": "https://github.com/nileshk/ical-php/tree/master"
+            },
+            "time": "2017-05-01 03:31:31"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "rb-cohen/ical-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

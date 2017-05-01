@@ -1,6 +1,12 @@
 {
-    "require": {
-        "facebook/graph-sdk": "^5.5",
-        "rb-cohen/ical-php": "1.0.3"
-    }
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/nileshk/ical-php"
+		}
+	],
+	"require": {
+		"facebook/graph-sdk": "^5.5",
+		"rb-cohen/ical-php": "dev-master"
+	}
 }
