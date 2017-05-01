@@ -1,7 +1,7 @@
 <?php
 class WPFC_Admin {
 	public static function menus(){
-        $page = add_options_page('WP FullCalendar', 'WP FullCalendar', 'manage_options', 'wp-fullcalendar', array('WPFC_Admin','admin_options'));
+		$page = add_options_page('WP FullCalendar', 'WP FullCalendar', 'manage_options', 'wp-fullcalendar', array('WPFC_Admin','admin_options'));
 		wp_enqueue_style('wp-fullcalendar', plugins_url('includes/css/admin.css',__FILE__));
 	}
 
@@ -10,7 +10,7 @@ class WPFC_Admin {
 		if( !empty($_REQUEST['_wpnonce']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'wpfc_options_save')){
 			foreach($_REQUEST as $option_name => $option_value){
 				if(substr($option_name, 0, 5) == 'wpfc_'){
-				    if( $option_name == 'wpfc_scripts_limit' ){ $option_value = str_replace(' ', '', $option_value); } //clean up comma seperated emails, no spaces needed
+					if( $option_name == 'wpfc_scripts_limit' ){ $option_value = str_replace(' ', '', $option_value); } //clean up comma seperated emails, no spaces needed
 					update_option($option_name, $option_value);
 				}
 			}
@@ -67,15 +67,15 @@ class WPFC_Admin {
 						</p>
 						<form action="" class="wpfc-options" method="post">
 							<?php do_action('wpfc_admin_before_options'); ?>
-                            <h2 style="margin-top:0px;"><?php _e( 'Calendar Sources', 'wp-fullcalendar' ); ?></h2>
-                            <table class='form-table'>
-                                <?php
-                                wpfc_options_radio_binary( __( 'Wordpress Events?', 'wp-fullcalendar' ), 'wpfc_wordpress_events', __( 'This enables getting events from Wordpress posts', 'wp-fullcalendar' ) );
-                                ?>
-                                <?php
-                                wpfc_options_radio_binary( __( 'Facebook Group Events?', 'wp-fullcalendar' ), 'wpfc_facebook_group_events', __( 'This enables getting events from Facebook Groups', 'wp-fullcalendar' ) );
-                                ?>
-                            </table>
+							<h2 style="margin-top:0px;"><?php _e( 'Calendar Sources', 'wp-fullcalendar' ); ?></h2>
+							<table class='form-table'>
+								<?php
+								wpfc_options_radio_binary( __( 'Wordpress Events?', 'wp-fullcalendar' ), 'wpfc_wordpress_events', __( 'This enables getting events from Wordpress posts', 'wp-fullcalendar' ) );
+								?>
+								<?php
+								wpfc_options_radio_binary( __( 'Facebook Group Events?', 'wp-fullcalendar' ), 'wpfc_facebook_group_events', __( 'This enables getting events from Facebook Groups', 'wp-fullcalendar' ) );
+								?>
+							</table>
 							<h2 style="margin-top:0px;"><?php _e('Post Types','wp-fullcalendar'); ?></h2>
 							<p><?php echo sprintf(__('By default, your calendar will show the types of posts based on settings below.','wp-fullcalendar'),''); ?></p>
 							<p>
@@ -88,8 +88,8 @@ class WPFC_Admin {
 									<?php 
 									$selected_taxonomies = get_option('wpfc_post_taxonomies');
 									foreach( get_post_types( apply_filters('wpfc_get_post_types_args', array('public'=>true )), 'names') as $post_type ){
-		 								$checked = get_option('wpfc_default_type') == $post_type ? 'checked':'';
-		 								$post_data = get_post_type_object($post_type);
+										$checked = get_option('wpfc_default_type') == $post_type ? 'checked':'';
+										$post_data = get_post_type_object($post_type);
 										echo "<li><label><input type='radio' class='wpfc-post-type' name='wpfc_default_type' value='$post_type' $checked />&nbsp;&nbsp;{$post_data->labels->name} (<em>$post_type</em>)</label>";
 										do_action('wpfc_admin_options_post_type_'.$post_type);
 										$post_type_taxonomies = get_object_taxonomies($post_type);
@@ -111,25 +111,25 @@ class WPFC_Admin {
 									?>
 								</ul>
 							</p>
-				            <script type="text/javascript">
-				            	jQuery(document).ready(function($){
-					            	$('input.wpfc-post-type').change(function(){
-						            	$('ul.wpfc-post-types div').hide();
-					            		$('input[name=wpfc_default_type]:checked').parent().parent().find('div').show();
-					            	});
-					            });
-				            </script>
-                            <h2><?php _e( 'Facebook Settings', 'wp-fullcalendar' ); ?></h2>
-                            <table>
+							<script type="text/javascript">
+								jQuery(document).ready(function($){
+									$('input.wpfc-post-type').change(function(){
+										$('ul.wpfc-post-types div').hide();
+										$('input[name=wpfc_default_type]:checked').parent().parent().find('div').show();
+									});
+								});
+							</script>
+							<h2><?php _e( 'Facebook Settings', 'wp-fullcalendar' ); ?></h2>
+							<table>
 								<?php
 								wpfc_options_input_text ( __( 'App ID', 'wp-fullcalendar'), 'wpfc_facebook_app_id', 'Facebook App ID', '' );
 								wpfc_options_input_text ( __( 'App Secret', 'wp-fullcalendar'), 'wpfc_facebook_app_secret', 'Facebook App Secret', '' );
 								wpfc_options_input_text ( __( 'Access Token', 'wp-fullcalendar'), 'wpfc_facebook_access_token', 'Facebook User Access Token', '' );
 								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-seperated list). These will be numbers.', '' );
 								?>
-                            </table>
-                            <?php do_action('wpfc_admin_after_cpt_options'); ?>
-						    <h2><?php _e('Calendar Options','wp-fullcalendar'); ?></h2>
+							</table>
+							<?php do_action('wpfc_admin_after_cpt_options'); ?>
+							<h2><?php _e('Calendar Options','wp-fullcalendar'); ?></h2>
 							<table class='form-table'>
 								<?php 
 								$available_views = apply_filters('wpfc_available_views',array('month'=>'Month','basicWeek'=>'Week (basic)','basicDay'=>'Day (basic)','agendaWeek'=>'Week (agenda)','agendaDay'=>'Day (agenda)'));
@@ -152,8 +152,8 @@ class WPFC_Admin {
 								?>
 							</table>
 							<?php do_action('wpfc_admin_after_calendar_options'); ?>
-						    <h2><?php _e('jQuery UI Themeroller','wp-fullcalendar'); ?></h2>
-						    <p><?php echo sprintf(__( 'You can select from a set of pre-made CSS themes, which are taken from the <a href="%s">jQuery Theme Roller</a> gallery. If you roll your own theme, upload the CSS file and images folder to <code>wp-content/yourtheme/plugins/wp-fullcalendar/</code> and refresh this page, it should appear an option in the pull down menu below.','wp-fullcalendar'),'http://jqueryui.com/themeroller/'); ?></p>
+							<h2><?php _e('jQuery UI Themeroller','wp-fullcalendar'); ?></h2>
+							<p><?php echo sprintf(__( 'You can select from a set of pre-made CSS themes, which are taken from the <a href="%s">jQuery Theme Roller</a> gallery. If you roll your own theme, upload the CSS file and images folder to <code>wp-content/yourtheme/plugins/wp-fullcalendar/</code> and refresh this page, it should appear an option in the pull down menu below.','wp-fullcalendar'),'http://jqueryui.com/themeroller/'); ?></p>
 							<table class='form-table'>
 								<?php
 								//jQuery UI ships with pre-made themes, so here they are. This was coded for packaged CSS Themes 1.10.4 and 1.11.4
@@ -166,33 +166,33 @@ class WPFC_Admin {
 									$css_custom_files[] = $css_file;
 								}
 								?>
-							    <tr class="form-field">
-							        <th scope="row" valign="top"><label for="product_package_unit_price"><?php _e( 'jQuery CSS Theme?', 'wp-fullcalendar'); ?></label></th>
-							        <td>
-							            <select name="wpfc_theme_css">
-							            	<option value="0"><?php _e( 'No Theme','wp-fullcalendar'); ?></option>
-							            	<optgroup label="<?php _e('Built-In','wp-fullcalendar'); ?>">
-								            	<?php foreach( $jquery_themes as $jquery_theme ): ?>
-								            	<option <?php if(get_option('wpfc_theme_css') == $jquery_theme) echo 'selected="selected"'; ?>><?php echo esc_html($jquery_theme); ?></option>
-								            	<?php endforeach; ?>
-							            	</optgroup>
-							            	<?php if( !empty($css_custom_files) ): ?>
-							            	<optgroup label="<?php _e('Custom','wp-fullcalendar'); ?>">
-							            		<?php foreach( $css_custom_files as $css_custom_file ): ?>
-							            			<option <?php if(get_option('wpfc_theme_css') == $css_custom_file) echo 'selected="selected"'; ?>><?php echo esc_html($css_custom_file); ?></option>
-							            		<?php endforeach; ?>
-							            	</optgroup>
-							            	<?php endif; ?>
-							            </select>
-							            <i><?php _e( 'You can use the jQuery UI CSS framework to style the calendar, and choose from a set of themes below.','wp-fullcalendar'); ?></i>
-							        </td>
-							    </tr>
+								<tr class="form-field">
+									<th scope="row" valign="top"><label for="product_package_unit_price"><?php _e( 'jQuery CSS Theme?', 'wp-fullcalendar'); ?></label></th>
+									<td>
+										<select name="wpfc_theme_css">
+											<option value="0"><?php _e( 'No Theme','wp-fullcalendar'); ?></option>
+											<optgroup label="<?php _e('Built-In','wp-fullcalendar'); ?>">
+												<?php foreach( $jquery_themes as $jquery_theme ): ?>
+												<option <?php if(get_option('wpfc_theme_css') == $jquery_theme) echo 'selected="selected"'; ?>><?php echo esc_html($jquery_theme); ?></option>
+												<?php endforeach; ?>
+											</optgroup>
+											<?php if( !empty($css_custom_files) ): ?>
+											<optgroup label="<?php _e('Custom','wp-fullcalendar'); ?>">
+												<?php foreach( $css_custom_files as $css_custom_file ): ?>
+													<option <?php if(get_option('wpfc_theme_css') == $css_custom_file) echo 'selected="selected"'; ?>><?php echo esc_html($css_custom_file); ?></option>
+												<?php endforeach; ?>
+											</optgroup>
+											<?php endif; ?>
+										</select>
+										<i><?php _e( 'You can use the jQuery UI CSS framework to style the calendar, and choose from a set of themes below.','wp-fullcalendar'); ?></i>
+									</td>
+								</tr>
 							</table>
 							<?php do_action('wpfc_admin_after_themeroller_options'); ?>
-						    <h2><?php _e('Tooltips','wp-fullcalendar'); ?></h2>
-						    <p><?php _e( 'You can use <a href="http://craigsworks.com/projects/qtip2/">jQuery qTips</a> to show excerpts of your events within a tooltip when hovering over a specific event on the calendar. You can control the content shown, positioning and style of the tool tips below.','wp-fullcalendar'); ?></p>
+							<h2><?php _e('Tooltips','wp-fullcalendar'); ?></h2>
+							<p><?php _e( 'You can use <a href="http://craigsworks.com/projects/qtip2/">jQuery qTips</a> to show excerpts of your events within a tooltip when hovering over a specific event on the calendar. You can control the content shown, positioning and style of the tool tips below.','wp-fullcalendar'); ?></p>
 							<table class='form-table'>
-							    <?php
+								<?php
 								wpfc_options_radio_binary ( __( 'Enable event tooltips?', 'wp-fullcalendar'), 'wpfc_qtips', '' );
 								$tip_styles = array();
 								foreach( WP_FullCalendar::$tip_styles as $tip_style ){
@@ -208,7 +208,7 @@ class WPFC_Admin {
 								wpfc_options_select ( __( 'Tooltip pointer position', 'wp-fullcalendar'), 'wpfc_qtips_my', $positions_options, __( 'Choose where the pointer will be situated on your tooltip.','wp-fullcalendar') );
 								wpfc_options_select ( __( 'Tooltip bubble position', 'wp-fullcalendar'), 'wpfc_qtips_at', $positions_options, __( 'Choose where your tooltip will be situated relative to the event link which triggers the tooltip.','wp-fullcalendar') );
 								wpfc_options_radio_binary ( __( 'Enable featured image?', 'wp-fullcalendar'), 'wpfc_qtips_image', __('If your post has a featured image, it will be included as a thumbnail.','wp-fullcalendar') );
-							    ?>
+								?>
 								<tr>
 									<td><label><?php  _e('Featured image size','wp-fullcalendar'); ?></label></td>
 									<td>
@@ -220,7 +220,7 @@ class WPFC_Admin {
 							<?php do_action('wpfc_admin_after_tooltip_options'); ?>
 							
 							<h2><?php _e ( 'JS and CSS Files (Optimization)', 'wp-fullcalendar'); ?></h2>
-				            <table class="form-table">
+							<table class="form-table">
 								<?php
 								wpfc_options_input_text( __( 'Load JS and CSS files on', 'dbem' ), 'wpfc_scripts_limit', __('Write the page IDs where you will display the FullCalendar on so CSS and JS files are only included on these pages. For multiple pages, use comma-seperated values e.g. 1,2,3. Leaving this blank will load our CSS and JS files on EVERY page, enter -1 for the home page.','wp-fullcalendar') );
 								?>
@@ -252,7 +252,7 @@ function wpfc_options_input_text($title, $name, $description, $default='') {
 	?>
 	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
 		<th scope="row"><?php echo esc_html($title); ?></th>
-	    <td>
+		<td>
 			<input name="<?php echo esc_attr($name) ?>" type="text" id="<?php echo esc_attr($title) ?>" style="width: 95%" value="<?php echo esc_attr(get_option($name, $default), ENT_QUOTES); ?>" size="45" /><br />
 			<em><?php echo $description; ?></em>
 		</td>
@@ -263,7 +263,7 @@ function wpfc_options_input_password($title, $name, $description) {
 	?>
 	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
 		<th scope="row"><?php echo esc_html($title); ?></th>
-	    <td>
+		<td>
 			<input name="<?php echo esc_attr($name) ?>" type="password" id="<?php echo esc_attr($title) ?>" style="width: 95%" value="<?php echo esc_attr(get_option($name)); ?>" size="45" /><br />
 			<em><?php echo $description; ?></em>
 		</td>
@@ -286,23 +286,23 @@ function wpfc_options_textarea($title, $name, $description) {
 function wpfc_options_radio($name, $options, $title='') {
 		$option = get_option($name);
 		?>
-	   	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
-	   		<?php if( !empty($title) ): ?>
-	   		<th scope="row"><?php  echo esc_html($title); ?></th>
-	   		<td>
-	   		<?php else: ?>
-	   		<td colspan="2">
-	   		<?php endif; ?>
-	   			<table>
-	   			<?php foreach($options as $value => $text): ?>
-	   				<tr>
-	   					<td><input id="<?php echo esc_attr($name) ?>_<?php echo esc_attr($value); ?>" name="<?php echo esc_attr($name) ?>" type="radio" value="<?php echo esc_attr($value); ?>" <?php if($option == $value) echo "checked='checked'"; ?> /></td>
-	   					<td><?php echo $text ?></td>
-	   				</tr>
+		<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
+			<?php if( !empty($title) ): ?>
+			<th scope="row"><?php  echo esc_html($title); ?></th>
+			<td>
+			<?php else: ?>
+			<td colspan="2">
+			<?php endif; ?>
+				<table>
+				<?php foreach($options as $value => $text): ?>
+					<tr>
+						<td><input id="<?php echo esc_attr($name) ?>_<?php echo esc_attr($value); ?>" name="<?php echo esc_attr($name) ?>" type="radio" value="<?php echo esc_attr($value); ?>" <?php if($option == $value) echo "checked='checked'"; ?> /></td>
+						<td><?php echo $text ?></td>
+					</tr>
 				<?php endforeach; ?>
 				</table>
 			</td>
-	   	</tr>
+		</tr>
 <?php
 }
 
@@ -314,14 +314,14 @@ function wpfc_options_radio_binary($title, $name, $description, $option_names = 
 		$list_events_page = get_option($name);
 	}
 	?>
-   	<tr valign="top" id='<?php echo $name;?>_row'>
-   		<th scope="row"><?php echo esc_html($title); ?></th>
-   		<td>
-   			<?php echo $option_names[1]; ?> <input id="<?php echo esc_attr($name) ?>_yes" name="<?php echo esc_attr($name) ?>" type="radio" value="1" <?php if($list_events_page) echo "checked='checked'"; ?> />&nbsp;&nbsp;&nbsp;
+	<tr valign="top" id='<?php echo $name;?>_row'>
+		<th scope="row"><?php echo esc_html($title); ?></th>
+		<td>
+			<?php echo $option_names[1]; ?> <input id="<?php echo esc_attr($name) ?>_yes" name="<?php echo esc_attr($name) ?>" type="radio" value="1" <?php if($list_events_page) echo "checked='checked'"; ?> />&nbsp;&nbsp;&nbsp;
 			<?php echo $option_names[0]; ?> <input  id="<?php echo esc_attr($name) ?>_no" name="<?php echo esc_attr($name) ?>" type="radio" value="0" <?php if(!$list_events_page) echo "checked='checked'"; ?> />
 			<br/><em><?php echo $description; ?></em>
 		</td>
-   	</tr>
+	</tr>
 	<?php
 }
 
@@ -331,18 +331,18 @@ function wpfc_options_select($title, $name, $list, $description, $default='') {
 		$option_value = 0; //Special value
 	}
 	?>
-   	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
-   		<th scope="row"><?php echo esc_html($title); ?></th>
-   		<td>
+	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
+		<th scope="row"><?php echo esc_html($title); ?></th>
+		<td>
 			<select name="<?php echo esc_attr($name); ?>" >
 				<?php foreach($list as $key => $value) : ?>
- 				<option value='<?php echo esc_attr($key) ?>' <?php echo ("$key" == $option_value) ? "selected='selected' " : ''; ?>>
- 					<?php echo esc_html($value); ?>
- 				</option>
+				<option value='<?php echo esc_attr($key) ?>' <?php echo ("$key" == $option_value) ? "selected='selected' " : ''; ?>>
+					<?php echo esc_html($value); ?>
+				</option>
 				<?php endforeach; ?>
 			</select> <br/>
 			<em><?php echo $description; ?></em>
 		</td>
-   	</tr>
+	</tr>
 	<?php
 }

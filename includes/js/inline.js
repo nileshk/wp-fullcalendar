@@ -21,7 +21,7 @@ jQuery(document).ready( function($){
 				ignoreTimezone: true,
 				allDayDefault: false
 		}],
-	    eventRender: function(event, element) {
+		eventRender: function(event, element) {
 			if( (event.post_id > 0 || event.event_id) && WPFC.wpfc_qtips == 1 ){
 				var event_data = { action : 'wpfc_qtip_content', post_id : event.post_id, event_id:event.event_id };
 				element.qtip({
@@ -40,7 +40,7 @@ jQuery(document).ready( function($){
 					style : { classes:WPFC.wpfc_qtips_classes }
 				});
 			}
-	    },
+		},
 		loading: function(bool) {
 			if (bool) {
 				$(this).parent().find('.wpfc-loading').show();
@@ -53,15 +53,15 @@ jQuery(document).ready( function($){
 				var container = $(element).parents('.wpfc-calendar-wrapper');
 				container.find('.fc-toolbar').after(container.next('.wpfc-calendar-search').show());
 				//catchall selectmenu handle
-			    $.widget( "custom.wpfc_selectmenu", $.ui.selectmenu, {
-			        _renderItem: function( ul, item ) {
-			        	var li = $( "<li>", { html: item.label.replace(/#([a-zA-Z0-9]{3}[a-zA-Z0-9]{3}?) - /g, '<span class="wpfc-cat-icon" style="background-color:#$1"></span>') } );
-			        	if ( item.disabled ) {
-			        		li.addClass( "ui-state-disabled" );
-			        	}
-			        	return li.appendTo( ul );
-			        }
-			    });
+				$.widget( "custom.wpfc_selectmenu", $.ui.selectmenu, {
+					_renderItem: function( ul, item ) {
+						var li = $( "<li>", { html: item.label.replace(/#([a-zA-Z0-9]{3}[a-zA-Z0-9]{3}?) - /g, '<span class="wpfc-cat-icon" style="background-color:#$1"></span>') } );
+						if ( item.disabled ) {
+							li.addClass( "ui-state-disabled" );
+						}
+						return li.appendTo( ul );
+					}
+				});
 				$('select.wpfc-taxonomy').wpfc_selectmenu({
 					format: function(text){
 						//replace the color hexes with color boxes
@@ -78,7 +78,7 @@ jQuery(document).ready( function($){
 				})
 			}
 			wpfc_loaded = true;
-	    }
+		}
 	};
 	if( WPFC.wpfc_locale ){
 		$.extend(fullcalendar_args, WPFC.wpfc_locale);

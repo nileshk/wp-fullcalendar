@@ -25,17 +25,17 @@ add_option('wpfc_facebook_group_ids', '');
 
 //make a change to the theme
 if( version_compare( get_option('wpfc_version'), '1.0.2') ){
-    $wpfc_theme_css = get_option('wpfc_theme_css');
-    //replace CSS theme value for new method
-    $wpfc_theme_css = str_replace( plugins_url('includes/css/ui-themes/',__FILE__), '', $wpfc_theme_css);
-    if( $wpfc_theme_css !== get_option('wpfc_theme_css') ){
-        //it uses jQuery UI CSS, so remove trailing .css from value
-        $wpfc_theme_css = str_replace('.css','', $wpfc_theme_css);
-    }else{
-        //replace custom CSS value
-        $wpfc_theme_css = str_replace( get_stylesheet_directory_uri()."/plugins/wp-fullcalendar/", '', $wpfc_theme_css);
-    }
-    update_option('wpfc_theme_css', $wpfc_theme_css);
+	$wpfc_theme_css = get_option('wpfc_theme_css');
+	//replace CSS theme value for new method
+	$wpfc_theme_css = str_replace( plugins_url('includes/css/ui-themes/',__FILE__), '', $wpfc_theme_css);
+	if( $wpfc_theme_css !== get_option('wpfc_theme_css') ){
+		//it uses jQuery UI CSS, so remove trailing .css from value
+		$wpfc_theme_css = str_replace('.css','', $wpfc_theme_css);
+	}else{
+		//replace custom CSS value
+		$wpfc_theme_css = str_replace( get_stylesheet_directory_uri()."/plugins/wp-fullcalendar/", '', $wpfc_theme_css);
+	}
+	update_option('wpfc_theme_css', $wpfc_theme_css);
 }
 
 //update version
