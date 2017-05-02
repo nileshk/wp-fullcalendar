@@ -21,25 +21,35 @@ jQuery(document).ready( function($){
 				ignoreTimezone: true,
 				allDayDefault: false
 		}],
-		eventRender: function(event, element) {
+		//eventRender: function(event, element) {
+        eventClick: function(event, jsEvent, view) {
 			if( (event.post_id > 0 || event.event_id) && WPFC.wpfc_qtips == 1 ){
 				var event_data = { action : 'wpfc_qtip_content', post_id : event.post_id, event_id:event.event_id };
-				element.qtip({
-					content:{
-						text : 'Loading...',
-						ajax : {
-							url : WPFC.ajaxurl,
-							type : "POST",
-							data : event_data
-						}
-					},
-					position : {
-						my: WPFC.wpfc_qtips_my,
-						at: WPFC.wpfc_qtips_at
-					},
-					style : { classes:WPFC.wpfc_qtips_classes }
+				$.ajax({
+                    method: "POST",
+                    url: WPFC.ajaxurl,
+					data: event_data
+                }).done(function(data) {
+                    var w = $(window).width();
+                    if (w > 1024) {
+                    	w = w * 0.8;
+					}
+                    var h = $(window).height() * 0.8;
+                    $('#wpfc-event-dialog')
+                        .html(data)
+                        .attr('title', event.title)
+                        .dialog({
+                            height: h,
+                            width: w,
+                            position: {my: "center", at: "center", of: window}
+                        });
+					if (console) {
+						console.log('event');
+					}
+
 				});
 			}
+			return false;
 		},
 		loading: function(bool) {
 			if (bool) {

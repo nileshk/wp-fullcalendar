@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '1.3');
+define('WPFC_VERSION', '1.3.1');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 
@@ -77,7 +77,14 @@ class WP_FullCalendar{
 		$wpfc_scripts_limit = get_option('wpfc_scripts_limit');
 		if( empty($wpfc_scripts_limit) || in_array($obj_id, explode(',',$wpfc_scripts_limit)) ){
 			//Scripts
-			wp_enqueue_script('wp-fullcalendar', plugins_url('includes/js/main.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position', 'jquery-ui-selectmenu'), WPFC_VERSION); //jQuery will load as dependency
+			wp_enqueue_script( 'wp-fullcalendar', plugins_url( 'includes/js/main.js', __FILE__ ), array(
+				'jquery',
+				'jquery-ui-core',
+				'jquery-ui-widget',
+				'jquery-ui-position',
+				'jquery-ui-selectmenu',
+				'jquery-ui-dialog'
+			), WPFC_VERSION ); //jQuery will load as dependency
 			WP_FullCalendar::localize_script();
 			//Styles
 			wp_enqueue_style('wp-fullcalendar', plugins_url('includes/css/main.css',__FILE__), array(), WPFC_VERSION);
@@ -319,7 +326,13 @@ class WP_FullCalendar{
 			$items = get_option('wpfc_facebook_events', array());
 			foreach ($items as $item) {
 				if ($item['event_id'] == $event_id) {
-					$content = '<div style="float:left; margin:0px 5px 5px 0px;">'.nl2br(htmlentities($item['description'])).'</div>'.$content;
+					//$content .= "&#x1F5D3";
+					$content .= '<p><strong>Start Time:</strong>&nbsp;'.$item['start'].'</p>';
+					$content .= '<p><strong>End Time:</strong>&nbsp;'.$item['end'].'</p>';
+					$content .= '<p><strong><a href="'.$item['url'].'" target="_blank">View event on Facebook</a></strong></p>';
+					$content .= '<p><strong><a href="/?'.WPFC_QUERY_VARIABLE.'='.$event_id.'" target="_blank">Add to Calendar</a></strong></p>';
+					$content .= '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">';
+					$content .= '<div style="float:left; margin:0px 5px 5px 0px;">'.nl2br(htmlentities($item['description'])).'</div>';
 					break;
 				}
 			}
@@ -379,6 +392,8 @@ class WP_FullCalendar{
 				}
 				do_action('wpfc_calendar_search', self::$args);
 			?>
+		</div>
+		<div id="wpfc-event-dialog" title="Event" style="display:none;">
 		</div>
 		<script type="text/javascript">
 			WPFC.data = { action : 'WP_FullCalendar'<?php
