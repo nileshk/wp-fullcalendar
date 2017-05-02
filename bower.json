@@ -1,0 +1,19 @@
+{
+  "name": "wp-fullcalendar",
+  "homepage": "https://github.com/nileshk/wp-fullcalendar",
+  "authors": [
+    "netweblogic",
+    "mikelynn",
+    "Nilesh Kapadia <code@nileshk.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "GPLv2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
