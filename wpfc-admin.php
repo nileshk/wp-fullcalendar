@@ -120,11 +120,11 @@ class WPFC_Admin {
 								});
 							</script>
 							<h2><?php _e( 'Facebook Settings', 'wp-fullcalendar' ); ?></h2>
-							<table>
+							<table class='form-table'>
 								<?php
 								wpfc_options_input_text ( __( 'App ID', 'wp-fullcalendar'), 'wpfc_facebook_app_id', 'Facebook App ID', '' );
 								wpfc_options_input_text ( __( 'App Secret', 'wp-fullcalendar'), 'wpfc_facebook_app_secret', 'Facebook App Secret', '' );
-								wpfc_options_input_text ( __( 'Access Token', 'wp-fullcalendar'), 'wpfc_facebook_access_token', 'Facebook User Access Token', '' );
+								echo '<tr valign="top"><th>Token</th><td><a class="button button-primary" href="'.get_site_url().'/?wpfc-facebook-request-token=true" target="_blank">Fetch Facebook Token</a><br/><em>Tokens expire every 60 days, so do this often.</em></td></tr>';
 								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-seperated list). These will be numbers.', '' );
 								?>
 							</table>

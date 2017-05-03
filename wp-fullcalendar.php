@@ -25,6 +25,8 @@ GNU General Public License for more details.
 define('WPFC_VERSION', '1.3.1');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
+define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
+define("WPFC_FACEBOOK_TOKEN_QUERY_VARIABLE", "wpfc-facebook-token");
 
 // Include the required dependencies.
 require_once( 'vendor/autoload.php' );
@@ -471,9 +473,74 @@ class WP_FullCalendar{
 				}
 				break;
 			}
+		} else if ( isset( $_GET[ WPFC_FACEBOOK_TOKEN_QUERY_VARIABLE ] ) ) {
+			if(!session_id()) {
+				session_start();
+			}
+			// Facebook code is set in 'code' GET URL parameter
+			$fb = self::getFacebook();
+
+			$helper = $fb->getRedirectLoginHelper();
+			try {
+				$accessToken = $helper->getAccessToken();
+				$longLivedToken = $fb->getOAuth2Client()->getLongLivedAccessToken($accessToken);
+
+			} catch(Facebook\Exceptions\FacebookResponseException $e) {
+				// When Graph returns an error
+				echo 'Graph returned an error: ' . $e->getMessage();
+				exit;
+			} catch(Facebook\Exceptions\FacebookSDKException $e) {
+				// When validation fails or other local issues
+				echo 'Facebook SDK returned an error: ' . $e->getMessage();
+				exit;
+			}
+
+			if (isset($longLivedToken)) {
+				// Logged in!
+				$_SESSION['facebook_access_token'] = (string) $longLivedToken;
+				update_option('wpfc_facebook_access_token', $longLivedToken);
+				// Now you can redirect to another page and use the
+				// access token from $_SESSION['facebook_access_token']
+				echo '<h2 style="color: blue">SUCCESS: Facebook long-lived access token retrieved. Do this often, tokens expire after 60 days.</h2>';
+				die();
+			} elseif ($helper->getError()) {
+				// The user denied the request
+				exit;
+			}
+
+		} else if ( isset( $_GET[ WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE ] ) ) {
+			if(!session_id()) {
+				session_start();
+			}
+
+			$fb = self::getFacebook();
+
+			$helper    = $fb->getRedirectLoginHelper();
+			$returnUrl = get_site_url() . '/?' . WPFC_FACEBOOK_TOKEN_QUERY_VARIABLE . '=true';
+			$loginUrl  = $helper->getLoginUrl($returnUrl);
+			if ( wp_redirect( $loginUrl ) ) {
+				exit;
+			}
 		}
 
 		return $vars;
+	}
+
+	/**
+	 * @return \Facebook\Facebook
+	 */
+	public static function getFacebook(): \Facebook\Facebook {
+		$fb_app_id     = get_option( 'wpfc_facebook_app_id' );
+		$fb_app_secret = get_option( 'wpfc_facebook_app_secret' );
+
+		// Initialize the Facebook PHP SDK v5.
+		$fb = new Facebook\Facebook( [
+			'app_id'                => $fb_app_id,
+			'app_secret'            => $fb_app_secret,
+			'default_graph_version' => 'v2.3'
+		] );
+
+		return $fb;
 	}
 }
 add_action('plugins_loaded',array('WP_FullCalendar','init'), 100);
