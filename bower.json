@@ -15,5 +15,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "fullcalendar": "^3.4.0",
+    "moment": "^2.18.1"
+  }
 }

@@ -1,0 +1,11 @@
+/* custom - reset some CSS rules imposed by other themes, add select menu css */
+.wpfc-calendar-wrapper { position:relative; }
+.wpfc-calendar-wrapper .fc-tbody > tr > td { padding:0; margin:0; }
+.wpfc-calendar-wrapper .fc table, .wpfc-calendar-wrapper .fc-head, .wpfc-calendar-wrapper .fc-head tr, .wpfc-calendar-wrapper .fc-head td { padding:0; margin:0; }
+.wpfc-calendar-wrapper *, .ui-selectmenu-menu { font-size:12px !important; }
+.wpfc-calendar-wrapper h2 { font-size:14px !important; margin:0 !important; }
+.wpfc-calendar-wrapper .wpfc-calendar-search { margin-bottom:10px; }
+.ui-selectmenu-menu .wpfc-cat-icon, .ui-selectmenu-button .wpfc-cat-icon { width:0.8em; height:0.8em; margin:0 1em 0 0; border:1px solid #cdcdcd; display:inline-block !important; }
+.ui-selectmenu { margin-right:10px;  }
+div.wpfc-loading { position:absolute; width:100%; height:100%; background:#FFFFFF url(../images/loading.gif) 50% 50% no-repeat; left:0px; top:0px; opacity:0.8; filter:alpha(opacity=80); z-index:9999999999; }
+.wpfc-more .fc-time { display:none; }

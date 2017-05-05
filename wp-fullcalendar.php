@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '1.3.1');
+define('WPFC_VERSION', '1.3.2');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
@@ -78,18 +78,21 @@ class WP_FullCalendar{
 		$obj_id = is_home() ? '-1':$wp_query->get_queried_object_id();
 		$wpfc_scripts_limit = get_option('wpfc_scripts_limit');
 		if( empty($wpfc_scripts_limit) || in_array($obj_id, explode(',',$wpfc_scripts_limit)) ){
-			//Scripts
-			wp_enqueue_script( 'wp-fullcalendar', plugins_url( 'includes/js/main.js', __FILE__ ), array(
+			$dependencies = array(
 				'jquery',
 				'jquery-ui-core',
 				'jquery-ui-widget',
 				'jquery-ui-position',
 				'jquery-ui-selectmenu',
-				'jquery-ui-dialog'
-			), WPFC_VERSION ); //jQuery will load as dependency
+				'jquery-ui-dialog');
+			//Scripts
+			wp_enqueue_script('wpfc-moment', plugins_url('bower_components/moment/min/moment-with-locales.js', __FILE__, $dependencies, WPFC_VERSION));
+			wp_enqueue_script( 'wp-fullcalendar', plugins_url( 'bower_components/fullcalendar/dist/fullcalendar.js', __FILE__ ), $dependencies, WPFC_VERSION ); //jQuery will load as dependency
+			wp_enqueue_script( 'wpfc-gcal', plugins_url( 'bower_components/fullcalendar/dist/gcal.js', __FILE__ ), $dependencies, WPFC_VERSION ); //jQuery will load as dependency
 			WP_FullCalendar::localize_script();
 			//Styles
-			wp_enqueue_style('wp-fullcalendar', plugins_url('includes/css/main.css',__FILE__), array(), WPFC_VERSION);
+			wp_enqueue_style('wpfc-custom', plugins_url('includes/css/wpfc.css',__FILE__), array(), WPFC_VERSION);
+			wp_enqueue_style('wp-fullcalendar', plugins_url('bower_components/fullcalendar/dist/fullcalendar.css',__FILE__), array(), WPFC_VERSION);
 			//Load custom style or jQuery UI Theme
 			$wpfc_theme = get_option('wpfc_theme_css');
 			if( preg_match('/\.css$/', $wpfc_theme) ){
