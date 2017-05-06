@@ -165,7 +165,17 @@ class WP_FullCalendar{
 
 		//initiate vars
 		$limit = get_option('wpfc_limit',3);
-		$items = get_option('wpfc_facebook_events', array());
+		$fb_fetch_now = false;
+		$fb_last_fetch = intval(get_option('wpfc_facebook_last_fetch', -1));
+		if ($fb_last_fetch < 0) {
+			$fb_fetch_now = true;
+		} else {
+			$fb_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 36000)); // Default 36000 = 10 minutes
+			if ((time() - $fb_last_fetch) > $fb_refresh_interval) {
+				$fb_fetch_now = true;
+			}
+		}
+		$items = $fb_fetch_now ? array() : get_option('wpfc_facebook_events', array());
 		$item_dates_more = array();
 		$item_date_counts = array();
 
@@ -215,6 +225,7 @@ class WP_FullCalendar{
 				}
 			}
 			update_option( 'wpfc_facebook_events', $items );
+			update_option('wpfc_facebook_last_fetch', time());
 		}
 
 		//echo json_encode(apply_filters('wpfc_ajax', $items));

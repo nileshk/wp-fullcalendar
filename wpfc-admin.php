@@ -127,6 +127,7 @@ class WPFC_Admin {
 								wpfc_options_input_text ( __( 'App Secret', 'wp-fullcalendar'), 'wpfc_facebook_app_secret', 'Facebook App Secret', '' );
 								echo '<tr valign="top"><th>Token</th><td><a class="button button-primary" href="'.get_site_url().'/?wpfc-facebook-request-token=true" target="_blank">Fetch Facebook Token</a><br/><em>Tokens expire every 60 days, so do this often.</em></td></tr>';
 								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-separated list). These will be numbers.', '' );
+								wpfc_options_input_text ( __( 'Refresh Interval', 'wp-fullcalendar'), 'wpfc_facebook_refresh_interval', 'Number of seconds to cache result of Facebook Group event fetch before trying again (set to 0 to disable caching and fetch every time)', '' );
 								?>
 							</table>
 							<hr/>
