@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '1.3.2');
+define('WPFC_VERSION', '1.3.3');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
@@ -54,8 +54,8 @@ class WP_FullCalendar{
 		}
 		add_action('wp_ajax_WP_FullCalendar', array('WP_FullCalendar','ajax') );
 		add_action('wp_ajax_nopriv_WP_FullCalendar', array('WP_FullCalendar','ajax') );
-		add_action('wp_ajax_wpfc_qtip_content', array('WP_FullCalendar','qtip_content') );
-		add_action('wp_ajax_nopriv_wpfc_qtip_content', array('WP_FullCalendar','qtip_content') );
+		add_action('wp_ajax_wpfc_dialog_content', array('WP_FullCalendar','dialog_content') );
+		add_action('wp_ajax_nopriv_dialog_dialog_content', array('WP_FullCalendar','dialog_content') );
 		//base arguments
 		self::$args['type'] = get_option('wpfc_default_type','event');
 		//START Events Manager Integration - will soon be removed
@@ -149,19 +149,7 @@ class WP_FullCalendar{
 		$js_vars['header']->center = 'title';
 		$js_vars['header']->right = implode(',', get_option('wpfc_available_views', array('month','basicWeek','basicDay')));
 		$js_vars['header'] = apply_filters('wpfc_calendar_header_vars', $js_vars['header']);
-		//qtip options TODO Delete qtip variables
-		$js_vars['wpfc_qtips'] = get_option('wpfc_qtips',true) == true;
-		if( $js_vars['wpfc_qtips'] ){
-			$js_vars['wpfc_qtips_classes'] = 'ui-tooltip-'. get_option('wpfc_qtips_style','light');
-			$js_vars['wpfc_qtips_my'] = get_option('wpfc_qtips_my','top center');
-			$js_vars['wpfc_qtips_at'] = get_option('wpfc_qtips_at','bottom center');
-			if( get_option('wpfc_qtips_rounded', false) ){
-				$js_vars['wpfc_qtips_classes'] .= " ui-tooltip-rounded";
-			}
-			if( get_option('wpfc_qtips_shadow', true) ){
-				$js_vars['wpfc_qtips_classes'] .= " ui-tooltip-shadow";
-			}
-		}
+		$js_vars['wpfc_dialog'] = get_option('wpfc_dialog',true) == true;
 		//calendar translations
 		wp_localize_script('wp-fullcalendar', 'WPFC', apply_filters('wpfc_js_vars', $js_vars));
 	}
@@ -324,9 +312,9 @@ class WP_FullCalendar{
 	}
 
 	/**
-	 * Called during AJAX request for qtip content for a calendar item 
+	 * Called during AJAX request for dialog content for a calendar item
 	 */
-	public static function qtip_content(){
+	public static function dialog_content(){
 		$content = '';
 		$event_id = $_REQUEST['event_id'];
 		if (!empty($event_id)) {
@@ -349,8 +337,8 @@ class WP_FullCalendar{
 				$content = wp_get_attachment_image($post->ID, 'thumbnail');
 			}else{
 				$content = ( !empty($post) ) ? $post->post_content : '';
-				if( get_option('wpfc_qtips_image',1) ){
-					$post_image = get_the_post_thumbnail($post->ID, array(get_option('wpfc_qtip_image_w',75),get_option('wpfc_qtip_image_h',75)));
+				if( get_option('wpfc_dialog_image',1) ){
+					$post_image = get_the_post_thumbnail($post->ID, array(get_option('wpfc_dialog_image_w',75),get_option('wpfc_dialog_image_h',75)));
 					if( !empty($post_image) ){
 						$content = '<div style="float:left; margin:0px 5px 5px 0px;">'.$post_image.'</div>'.$content;
 					}
@@ -358,7 +346,7 @@ class WP_FullCalendar{
 			}
 		}
 
-		echo apply_filters('wpfc_qtip_content', $content);
+		echo apply_filters('wpfc_dialog_content', $content);
 		die();
 	}
 	

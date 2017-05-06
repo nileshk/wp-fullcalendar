@@ -199,31 +199,16 @@ class WPFC_Admin {
 								</tr>
 							</table>
 							<?php do_action('wpfc_admin_after_themeroller_options'); ?>
-							<h2><?php _e('Tooltips','wp-fullcalendar'); ?></h2>
-							<p><?php _e( 'You can use <a href="http://craigsworks.com/projects/qtip2/">jQuery qTips</a> to show excerpts of your events within a tooltip when hovering over a specific event on the calendar. You can control the content shown, positioning and style of the tool tips below.','wp-fullcalendar'); ?></p>
 							<table class='form-table'>
 								<?php
-								wpfc_options_radio_binary ( __( 'Enable event tooltips?', 'wp-fullcalendar'), 'wpfc_qtips', '' );
-								$tip_styles = array();
-								foreach( WP_FullCalendar::$tip_styles as $tip_style ){
-									$tip_styles[$tip_style] = $tip_style;
-								}
-								wpfc_options_select(__('Tooltip style','wp-fullcalendar'), 'wpfc_qtips_style', $tip_styles, __('You can choose from one of these preset styles for your tooltip.','wp-fullcalendar'));
-								wpfc_options_radio_binary ( __( 'Rounded tooltips?', 'wp-fullcalendar'), 'wpfc_qtips_rounded', __( 'If your chosen tooltip style doesn\'t already do/prevent this, you can add rounded corners using CSS3.','wp-fullcalendar') );
-								wpfc_options_radio_binary ( __( 'Add shadow to tooltips?', 'wp-fullcalendar'), 'wpfc_qtips_shadow', __( 'If your chosen tooltip style doesn\'t already do/prevent this, you can add a CSS3 drop-shadow effect to your tooltip.','wp-fullcalendar') );
-								$positions_options = array();
-								foreach( WP_FullCalendar::$tip_positions as $position ){
-									$positions_options[$position] = $position;
-								}
-								wpfc_options_select ( __( 'Tooltip pointer position', 'wp-fullcalendar'), 'wpfc_qtips_my', $positions_options, __( 'Choose where the pointer will be situated on your tooltip.','wp-fullcalendar') );
-								wpfc_options_select ( __( 'Tooltip bubble position', 'wp-fullcalendar'), 'wpfc_qtips_at', $positions_options, __( 'Choose where your tooltip will be situated relative to the event link which triggers the tooltip.','wp-fullcalendar') );
-								wpfc_options_radio_binary ( __( 'Enable featured image?', 'wp-fullcalendar'), 'wpfc_qtips_image', __('If your post has a featured image, it will be included as a thumbnail.','wp-fullcalendar') );
+								wpfc_options_radio_binary ( __( 'Enable dialogs?', 'wp-fullcalendar'), 'wpfc_dialog', '' );
+								wpfc_options_radio_binary ( __( 'Enable featured image?', 'wp-fullcalendar'), 'wpfc_dialog_image', __('If your post has a featured image, it will be included as a thumbnail.','wp-fullcalendar') );
 								?>
 								<tr>
 									<td><label><?php  _e('Featured image size','wp-fullcalendar'); ?></label></td>
 									<td>
-										<?php _e('Width','wp-fullcalendar'); ?> : <input name="wpfc_qtips_image_w" type="text" style="width:40px;" value="<?php echo get_option('wpfc_qtips_image_w'); ?>" /> 
-										<?php _e('Height','wp-fullcalendar'); ?> : <input name="wpfc_qtips_image_h" type="text" style="width:40px;" value="<?php echo get_option('wpfc_qtips_image_h'); ?>" />
+										<?php _e('Width','wp-fullcalendar'); ?> : <input name="wpfc_dialog_image_w" type="text" style="width:40px;" value="<?php echo get_option('wpfc_dialog_image_w'); ?>" />
+										<?php _e('Height','wp-fullcalendar'); ?> : <input name="wpfc_dialog_image_h" type="text" style="width:40px;" value="<?php echo get_option('wpfc_dialog_image_h'); ?>" />
 									</td>
 								</tr>
 							</table>

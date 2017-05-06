@@ -34,8 +34,8 @@ jQuery(document).ready( function($){
 		eventSources: eventSources,
 		//eventRender: function(event, element) {
 		eventClick: function (event, jsEvent, view) {
-			if ((event.post_id > 0 || event.event_id) && WPFC.wpfc_qtips == 1) {
-				var event_data = {action: 'wpfc_qtip_content', post_id: event.post_id, event_id: event.event_id};
+			if ((event.post_id > 0 || event.event_id) && WPFC.wpfc_dialog == 1) {
+				var event_data = {action: 'wpfc_dialog_content', post_id: event.post_id, event_id: event.event_id};
 				$.ajax({
 					method: "POST",
 					url: WPFC.ajaxurl,
