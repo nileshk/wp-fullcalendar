@@ -119,6 +119,7 @@ class WPFC_Admin {
 									});
 								});
 							</script>
+							<hr/>
 							<h2><?php _e( 'Facebook Settings', 'wp-fullcalendar' ); ?></h2>
 							<table class='form-table'>
 								<?php
@@ -128,13 +129,15 @@ class WPFC_Admin {
 								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-separated list). These will be numbers.', '' );
 								?>
 							</table>
+							<hr/>
 							<h2><?php _e( 'Google Settings', 'wp-fullcalendar' ); ?></h2>
 							<table class='form-table'>
 								<?php
 								wpfc_options_input_text( __('Calendar API Key'), 'wpfc_google_calendar_api_key', 'Google Calendar API Key', '');
-								wpfc_options_textarea( __( 'Calendar IDs', 'wp-fullcalendar'), 'wpfc_google_calendar_ids', 'Google Calendar IDs (comma-separated list).');
+								wpfc_options_textarea( __( 'Calendar IDs', 'wp-fullcalendar'), 'wpfc_google_calendar_ids', 'Google Calendar IDs (separated by white space; can be on separate lines).');
 								?>
 							</table>
+							<hr/>
 							<?php do_action('wpfc_admin_after_cpt_options'); ?>
 							<h2><?php _e('Calendar Options','wp-fullcalendar'); ?></h2>
 							<table class='form-table'>
@@ -283,7 +286,7 @@ function wpfc_options_textarea($title, $name, $description) {
 	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
 		<th scope="row"><?php echo esc_html($title); ?></th>
 			<td>
-				<textarea name="<?php echo esc_attr($name) ?>" id="<?php echo esc_attr($name) ?>" rows="6" cols="60"><?php echo esc_attr(get_option($name), ENT_QUOTES);?></textarea><br/>
+				<textarea name="<?php echo esc_attr($name) ?>" id="<?php echo esc_attr($name) ?>" rows="6" style="width: 95%"><?php echo esc_attr(get_option($name), ENT_QUOTES);?></textarea><br/>
 				<em><?php echo $description; ?></em>
 			</td>
 		</tr>

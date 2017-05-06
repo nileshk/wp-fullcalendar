@@ -1,6 +1,8 @@
 var wpfc_loaded = false;
 var wpfc_counts = {};
 jQuery(document).ready( function($){
+	var DIALOG_MAX_SIZE = 840;
+
 	var eventSources = [{
 		url: WPFC.ajaxurl,
 		data: WPFC.data,
@@ -40,8 +42,8 @@ jQuery(document).ready( function($){
 					data: event_data
 				}).done(function (data) {
 					var w = $(window).width();
-					if (w > 1024) {
-						w = w * 0.8;
+					if (w > DIALOG_MAX_SIZE) {
+						w = DIALOG_MAX_SIZE;
 					}
 					var h = $(window).height() * 0.8;
 					$('#wpfc-event-dialog')
@@ -55,8 +57,8 @@ jQuery(document).ready( function($){
 				});
 			} else { // Google Calendar
 				var w = $(window).width();
-				if (w >= 1024) {
-					w = 1024;
+				if (w > DIALOG_MAX_SIZE) {
+					w = DIALOG_MAX_SIZE;
 				}
 				var h = $(window).height() * 0.8;
 
@@ -70,10 +72,11 @@ jQuery(document).ready( function($){
 					+'<strong>End:</strong> ' + event.end.format(dateFormat) + '<br/><br/>';
 
 				}
+				var htmlEventDescription = event.description ? event.description.replace(/$/mg,'<br/>') : '';
 				var htmlDescription = htmlDate
 					+ '<a href="' + event.url + '" target="_blank">View Event on Google Calendar</a><br/><br/>'
 					+ '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">'
-					+ event.description.replace(/$/mg,'<br/>');
+					+ htmlEventDescription;
 
 				$('#wpfc-event-dialog')
 					.html(htmlDescription)

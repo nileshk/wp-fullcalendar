@@ -139,7 +139,7 @@ class WP_FullCalendar{
 		$js_vars['wpfc_limit'] = get_option('wpfc_limit',3);
 		$js_vars['wpfc_limit_txt'] = get_option('wpfc_limit_txt','more ...');
 		$js_vars['google_calendar_api_key'] = get_option('wpfc_google_calendar_api_key', '');
-		$js_vars['google_calendar_ids'] = explode(',', get_option('wpfc_google_calendar_ids', ''));
+		$js_vars['google_calendar_ids'] = preg_split('/\s+/', get_option('wpfc_google_calendar_ids', ''));
 		//FC options
 		$js_vars['timeFormat'] = get_option('wpfc_timeFormat', 'h(:mm)t');
 		$js_vars['defaultView'] = get_option('wpfc_defaultView', 'month');
