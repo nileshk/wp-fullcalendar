@@ -37,9 +37,6 @@ use Ical\Component\Event;
 
 class WP_FullCalendar{
 	static $args = array();
-	static $tip_styles = array('default','plain','light','dark','red','green','blue','youtube','jtools','cluetip','tipped','tipsy');
-	static $tip_styles_css3 = array('shadow','rounded');
-	static $tip_positions = array('top left', 'top right', 'top center', 'bottom left', 'bottom right', 'bottom center', 'right center', 'right top', 'right bottom', 'left center', 'left top', 'left bottom', 'center');
 
 	public static function init() {
 		//Scripts
