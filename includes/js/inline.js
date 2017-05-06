@@ -1,6 +1,19 @@
 var wpfc_loaded = false;
 var wpfc_counts = {};
-jQuery(document).ready( function($){	
+jQuery(document).ready( function($){
+	var eventSources = [{
+		url: WPFC.ajaxurl,
+		data: WPFC.data,
+		ignoreTimezone: true,
+		allDayDefault: false
+	}];
+	if (WPFC.google_calendar_api_key && WPFC.google_calendar_ids) {
+		for (var i = 0; i < WPFC.google_calendar_ids.length; i++) {
+			var calendarId = WPFC.google_calendar_ids[i];
+			eventSources.push({googleCalendarId: calendarId});
+		}
+	}
+
 	var fullcalendar_args = {
 		timeFormat: WPFC.timeFormat,
 		defaultView: WPFC.defaultView,
@@ -15,39 +28,61 @@ jQuery(document).ready( function($){
 		theme: WPFC.wpfc_theme,
 		firstDay: WPFC.firstDay,
 		editable: false,
-		eventSources: [{
-				url : WPFC.ajaxurl,
-				data : WPFC.data,
-				ignoreTimezone: true,
-				allDayDefault: false
-		}],
+		googleCalendarApiKey: WPFC.google_calendar_api_key,
+		eventSources: eventSources,
 		//eventRender: function(event, element) {
-        eventClick: function(event, jsEvent, view) {
-			if( (event.post_id > 0 || event.event_id) && WPFC.wpfc_qtips == 1 ){
-				var event_data = { action : 'wpfc_qtip_content', post_id : event.post_id, event_id:event.event_id };
+		eventClick: function (event, jsEvent, view) {
+			if ((event.post_id > 0 || event.event_id) && WPFC.wpfc_qtips == 1) {
+				var event_data = {action: 'wpfc_qtip_content', post_id: event.post_id, event_id: event.event_id};
 				$.ajax({
-                    method: "POST",
-                    url: WPFC.ajaxurl,
+					method: "POST",
+					url: WPFC.ajaxurl,
 					data: event_data
-                }).done(function(data) {
-                    var w = $(window).width();
-                    if (w > 1024) {
-                    	w = w * 0.8;
+				}).done(function (data) {
+					var w = $(window).width();
+					if (w > 1024) {
+						w = w * 0.8;
 					}
-                    var h = $(window).height() * 0.8;
-                    $('#wpfc-event-dialog')
-                        .html(data)
-                        .attr('title', event.title)
-                        .dialog({
-                            height: h,
-                            width: w,
-                            position: {my: "center", at: "center", of: window}
-                        });
-					if (console) {
-						console.log('event');
-					}
-
+					var h = $(window).height() * 0.8;
+					$('#wpfc-event-dialog')
+						.html(data)
+						.attr('title', event.title)
+						.dialog({
+							height: h,
+							width: w,
+							position: {my: "center", at: "center", of: window}
+						});
 				});
+			} else { // Google Calendar
+				var w = $(window).width();
+				if (w >= 1024) {
+					w = 1024;
+				}
+				var h = $(window).height() * 0.8;
+
+				var dateFormat = 'MMMM Do YYYY, h:mm:ss a';
+				var dateFormatAllday = 'MMMM Do YYYY';
+				var htmlDate;
+				if (event.allDay) {
+					htmlDate = '<strong>Date:</strong> ' + event.start.format(dateFormatAllday) + '<br/><br/>'
+				} else {
+					htmlDate = '<strong>Start:</strong> ' + event.start.format(dateFormat) + '<br/>'
+					+'<strong>End:</strong> ' + event.end.format(dateFormat) + '<br/><br/>';
+
+				}
+				var htmlDescription = htmlDate
+					+ '<a href="' + event.url + '" target="_blank">View Event on Google Calendar</a><br/><br/>'
+					+ '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">'
+					+ event.description.replace(/$/mg,'<br/>');
+
+				$('#wpfc-event-dialog')
+					.html(htmlDescription)
+					.attr('title', event.title)
+					.dialog({
+						height: h,
+						width: w,
+						position: {my: "center", at: "center", of: window}
+					});
 			}
 			return false;
 		},

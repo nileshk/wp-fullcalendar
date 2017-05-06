@@ -125,7 +125,14 @@ class WPFC_Admin {
 								wpfc_options_input_text ( __( 'App ID', 'wp-fullcalendar'), 'wpfc_facebook_app_id', 'Facebook App ID', '' );
 								wpfc_options_input_text ( __( 'App Secret', 'wp-fullcalendar'), 'wpfc_facebook_app_secret', 'Facebook App Secret', '' );
 								echo '<tr valign="top"><th>Token</th><td><a class="button button-primary" href="'.get_site_url().'/?wpfc-facebook-request-token=true" target="_blank">Fetch Facebook Token</a><br/><em>Tokens expire every 60 days, so do this often.</em></td></tr>';
-								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-seperated list). These will be numbers.', '' );
+								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-separated list). These will be numbers.', '' );
+								?>
+							</table>
+							<h2><?php _e( 'Google Settings', 'wp-fullcalendar' ); ?></h2>
+							<table class='form-table'>
+								<?php
+								wpfc_options_input_text( __('Calendar API Key'), 'wpfc_google_calendar_api_key', 'Google Calendar API Key', '');
+								wpfc_options_textarea( __( 'Calendar IDs', 'wp-fullcalendar'), 'wpfc_google_calendar_ids', 'Google Calendar IDs (comma-separated list).');
 								?>
 							</table>
 							<?php do_action('wpfc_admin_after_cpt_options'); ?>

@@ -138,6 +138,8 @@ class WP_FullCalendar{
 		$js_vars['wpfc_theme'] = get_option('wpfc_theme_css') ? true:false;
 		$js_vars['wpfc_limit'] = get_option('wpfc_limit',3);
 		$js_vars['wpfc_limit_txt'] = get_option('wpfc_limit_txt','more ...');
+		$js_vars['google_calendar_api_key'] = get_option('wpfc_google_calendar_api_key', '');
+		$js_vars['google_calendar_ids'] = explode(',', get_option('wpfc_google_calendar_ids', ''));
 		//FC options
 		$js_vars['timeFormat'] = get_option('wpfc_timeFormat', 'h(:mm)t');
 		$js_vars['defaultView'] = get_option('wpfc_defaultView', 'month');
@@ -146,8 +148,8 @@ class WP_FullCalendar{
 		$js_vars['header']->left = 'prev,next today';
 		$js_vars['header']->center = 'title';
 		$js_vars['header']->right = implode(',', get_option('wpfc_available_views', array('month','basicWeek','basicDay')));
-		$js_vars['header'] = apply_filters('wpfc_calendar_header_vars', $js_vars['header']); 
-		//qtip options
+		$js_vars['header'] = apply_filters('wpfc_calendar_header_vars', $js_vars['header']);
+		//qtip options TODO Delete qtip variables
 		$js_vars['wpfc_qtips'] = get_option('wpfc_qtips',true) == true;
 		if( $js_vars['wpfc_qtips'] ){
 			$js_vars['wpfc_qtips_classes'] = 'ui-tooltip-'. get_option('wpfc_qtips_style','light');
