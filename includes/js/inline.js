@@ -36,7 +36,7 @@ jQuery(document).ready( function($){
 		eventSources: eventSources,
 		//eventRender: function(event, element) {
 		eventClick: function (event, jsEvent, view) {
-			if ((event.event_source_type === 'facebook' || event.event_source_type === 'wordpress') && WPFC.wpfc_dialog == 1) {
+			if (event.event_source_type === 'wordpress' && WPFC.wpfc_dialog == 1) {
 				var event_data = {action: 'wpfc_dialog_content', post_id: event.post_id, event_id: event.event_id};
 				$.ajax({
 					method: "POST",
@@ -64,7 +64,7 @@ jQuery(document).ready( function($){
 				}
 				var h = $(window).height() * 0.8;
 
-				var dateFormat = 'MMMM Do YYYY, h:mm:ss a';
+				var dateFormat = 'MMMM Do YYYY, h:mma';
 				var dateFormatAllday = 'MMMM Do YYYY';
 				var htmlDate;
 				if (event.allDay) {
@@ -75,10 +75,17 @@ jQuery(document).ready( function($){
 
 				}
 				var htmlEventDescription = event.description ? event.description.replace(/$/mg,'<br/>') : '';
+				var viewEventLabel = "View Event";
+				if (event.event_source_type === 'google') {
+					viewEventLabel = "View Event on Google Calendar";
+				} else if (event.event_source_type === 'facebook') {
+					viewEventLabel = "View Event on Facebook";
+				}
+
 				var htmlDescription = htmlDate
-					+ '<a href="' + event.url + '" target="_blank">View Event on Google Calendar</a><br/>'
-					+ '<p><strong><a href="/?wpfc-ical=' + event.id  + '&event_source_type=' + event.event_source_type + '" target="_blank">Add to Calendar</a></strong></p>'
+					+ '<a href="' + event.url + '" target="_blank">' + viewEventLabel + '</a><br/>'
 					+ '<br/>'
+					+ '<p><strong><a href="/?wpfc-ical=' + event.id  + '&event_source_type=' + event.event_source_type + '" target="_blank">Add to Calendar</a></strong></p>'
 					+ '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">'
 					+ htmlEventDescription;
 
