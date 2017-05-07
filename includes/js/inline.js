@@ -57,7 +57,7 @@ jQuery(document).ready( function($){
 							position: {my: "center", at: "center", of: window}
 						});
 				});
-			} else { // Google Calendar
+			} else {
 				var w = $(window).width();
 				if (w > DIALOG_MAX_SIZE) {
 					w = DIALOG_MAX_SIZE;
@@ -68,12 +68,16 @@ jQuery(document).ready( function($){
 				var dateFormatAllday = 'MMMM Do YYYY';
 				var htmlDate;
 				if (event.allDay) {
-					htmlDate = '<strong>Date:</strong> ' + event.start.format(dateFormatAllday) + '<br/><br/>'
+					htmlDate = '<strong>Date:</strong> ' + event.start.format(dateFormatAllday) + '<br/>'
 				} else {
 					htmlDate = '<strong>Start:</strong> ' + event.start.format(dateFormat) + '<br/>'
-					+'<strong>End:</strong> ' + event.end.format(dateFormat) + '<br/><br/>';
-
+					+'<strong>End:</strong> ' + event.end.format(dateFormat) + '<br/>';
 				}
+				htmlDate += '<br/>';
+				if (event.location) {
+					htmlDate += '<strong>Location: </strong>' + event.location + '<br/>';
+				}
+				htmlDate += '<br/>';
 				var htmlEventDescription = event.description ? event.description.replace(/$/mg,'<br/>') : '';
 				var viewEventLabel = "View Event";
 				if (event.event_source_type === 'google') {

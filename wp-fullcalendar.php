@@ -174,7 +174,7 @@ class WP_FullCalendar{
 			$fb_fetch_now = true;
 		} else {
 			$fb_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 36000)); // Default 36000 = 10 minutes
-			if ((time() - $fb_last_fetch) > $fb_refresh_interval) {
+			if ($fb_refresh_interval == 0 || (time() - $fb_last_fetch) > $fb_refresh_interval) {
 				$fb_fetch_now = true;
 			}
 		}
@@ -211,6 +211,7 @@ class WP_FullCalendar{
 					$event_start_time  = $graph_node['start_time'];
 					$event_end_time    = $graph_node['end_time'];
 					$event_id          = $graph_node['id'];
+					$event_location    = $graph_node['place'];
 
 					$start_dt = DateTime::createFromFormat( 'U', $event_start_time->getTimestamp());
 					$start_dt->setTimezone(new DateTimeZone('America/New_York')); // TODO Configure time zone
@@ -226,6 +227,7 @@ class WP_FullCalendar{
 						"end"               => $end_dt->format(DateTime::ISO8601),
 						"url"               => 'https://www.facebook.com/events/' . $event_id,
 						'event_id'          => $event_id,
+						'location'          => $event_location,
 						'event_source_type' => 'facebook',
 						'className'         => 'facebook-event'
 					);
@@ -246,7 +248,7 @@ class WP_FullCalendar{
 				$google_fetch_now = true;
 			} else {
 				$google_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 36000)); // Default 36000 = 10 minutes
-				if ((time() - $google_last_fetch) > $google_refresh_interval) {
+				if ($google_refresh_interval == 0 || (time() - $google_last_fetch) > $google_refresh_interval) {
 					$google_fetch_now = true;
 				}
 			}
@@ -281,6 +283,7 @@ class WP_FullCalendar{
 								"url"               => $event->htmlLink,
 								'event_id'          => $event->id,
 								'allDay'            => $event->allDay,
+								'location'          => $event->location,
 								'event_source_type' => 'google',
 								'className'         => 'google-event'
 							);
