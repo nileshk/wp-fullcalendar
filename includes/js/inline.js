@@ -74,7 +74,7 @@ jQuery(document).ready( function($){
 					+'<strong>End:</strong> ' + event.end.format(dateFormat) + '<br/>';
 				}
 				htmlDate += '<br/>';
-				if (event.location) {
+				if (event.event_source_type === 'google' && event.location) { // TODO Handling Facebook location format
 					htmlDate += '<strong>Location: </strong>' + event.location + '<br/>';
 				}
 				htmlDate += '<br/>';
