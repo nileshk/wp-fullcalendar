@@ -212,13 +212,18 @@ class WP_FullCalendar{
 					$event_end_time    = $graph_node['end_time'];
 					$event_id          = $graph_node['id'];
 
+					$start_dt = DateTime::createFromFormat( 'U', $event_start_time->getTimestamp());
+					$start_dt->setTimezone(new DateTimeZone('America/New_York')); // TODO Configure time zone
+					$end_dt = DateTime::createFromFormat( 'U', $event_end_time->getTimestamp());
+					$end_dt->setTimezone(new DateTimeZone('America/New_York')); // TODO Configure time zone
+
 					$item = array(
 						"id"                => $event_id,
 						"title"             => $event_name,
 						"description"       => $event_description,
 						"color"             => $color,
-						"start"             => date( 'Y-m-d\TH:i:s', $event_start_time->getTimestamp() ),
-						"end"               => date( 'Y-m-d\TH:i:s', $event_end_time->getTimestamp() ),
+						"start"             => $start_dt->format(DateTime::ISO8601),
+						"end"               => $end_dt->format(DateTime::ISO8601),
 						"url"               => 'https://www.facebook.com/events/' . $event_id,
 						'event_id'          => $event_id,
 						'event_source_type' => 'facebook',
@@ -526,7 +531,14 @@ class WP_FullCalendar{
 					$event = new Event( 'uid-1@example' );
 					//$event->created( new DateTime( '2015-01-01' ) );
 					//$event->lastModified( new DateTime( '2015-01-05' ) );
-					$event->between( new DateTime( $item['start'] ), new DateTime( $item['end'] ) );
+
+					// UTC time zone seems to make Apple Calendar and Finder preview happy
+					$start_dt = new DateTime( $item['start'] );
+					$start_dt->setTimezone(new DateTimeZone("UTC"));
+					$end_dt   = new DateTime( $item['end'] );
+					$end_dt->setTimezone(new DateTimeZone("UTC"));
+
+					$event->between( $start_dt, $end_dt );
 					$event->summary( $item['title'] );
 					$event->description( $item['description'] );
 					$event->allDay( false ); // TODO set this
