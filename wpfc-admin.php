@@ -129,6 +129,7 @@ class WPFC_Admin {
 								wpfc_options_input_text ( __( 'Group IDs', 'wp-fullcalendar'), 'wpfc_facebook_group_ids', 'Facebook Group IDs (comma-separated list). These will be numbers.', '' );
 								wpfc_options_input_text ( __( 'Refresh Interval', 'wp-fullcalendar'), 'wpfc_facebook_refresh_interval', 'Number of seconds to cache result of Facebook Group event fetch before trying again (set to 0 to disable caching and fetch every time)', '' );
 								?>
+								<input type="hidden" name="wpfc_facebook_events" value=""/>
 							</table>
 							<hr/>
 							<h2><?php _e( 'Google Settings', 'wp-fullcalendar' ); ?></h2>
@@ -138,6 +139,7 @@ class WPFC_Admin {
 								wpfc_options_textarea( __( 'Calendar IDs', 'wp-fullcalendar'), 'wpfc_google_calendar_ids', 'Google Calendar IDs (separated by white space; can be on separate lines).');
 								wpfc_options_input_text ( __( 'Refresh Interval', 'wp-fullcalendar'), 'wpfc_google_refresh_interval', 'Number of seconds to cache result of Google Calendar event fetch before trying again (set to 0 to disable caching and fetch every time)', '' );
 								?>
+								<input type="hidden" name="wpfc_google_events" value=""/>
 							</table>
 							<hr/>
 							<?php do_action('wpfc_admin_after_cpt_options'); ?>
@@ -223,7 +225,7 @@ class WPFC_Admin {
 								?>
 							</table>
 							<?php do_action('wpfc_admin_after_optimizations'); ?>
-							
+							<p><i>Note: Facebook and Google event caches will be cleared on save</i></p>
 							<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('wpfc_options_save'); ?>" />
 							<p class="submit"><input type="submit" value="<?php _e('Submit Changes','wp-fullcalendar'); ?>" class="button-primary"></p>
 						</form>
