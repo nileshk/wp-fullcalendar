@@ -173,7 +173,7 @@ class WP_FullCalendar{
 		if ($fb_last_fetch < 0) {
 			$fb_fetch_now = true;
 		} else {
-			$fb_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 36000)); // Default 36000 = 10 minutes
+			$fb_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 600)); // Default 600 = 10 minutes
 			if ($fb_refresh_interval == 0 || (time() - $fb_last_fetch) > $fb_refresh_interval) {
 				$fb_fetch_now = true;
 			}
@@ -247,7 +247,7 @@ class WP_FullCalendar{
 			if ($google_last_fetch < 0) {
 				$google_fetch_now = true;
 			} else {
-				$google_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 36000)); // Default 36000 = 10 minutes
+				$google_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 600)); // Default 600 = 10 minutes
 				if ($google_refresh_interval == 0 || (time() - $google_last_fetch) > $google_refresh_interval) {
 					$google_fetch_now = true;
 				}

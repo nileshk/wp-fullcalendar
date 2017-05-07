@@ -15,8 +15,8 @@ add_option('wpfc_facebook_app_id', '');
 add_option('wpfc_facebook_app_secret', '');
 add_option('wpfc_facebook_access_token', '');
 add_option('wpfc_facebook_group_ids', '');
-add_option('wpfc_facebook_refresh_interval', 36000); // In seconds (36000 = 10 minutes)
-add_option('wpfc_google_refresh_interval', 36000); // In seconds (36000 = 10 minutes)
+add_option('wpfc_facebook_refresh_interval', 600); // In seconds (600 = 10 minutes)
+add_option('wpfc_google_refresh_interval', 600); // In seconds (600 = 10 minutes)
 
 //make a change to the theme
 if( version_compare( get_option('wpfc_version'), '1.0.2') ){
