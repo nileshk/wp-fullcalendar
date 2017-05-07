@@ -9,12 +9,14 @@ jQuery(document).ready( function($){
 		ignoreTimezone: true,
 		allDayDefault: false
 	}];
+	/* Fetching Goolge Events from Server instead
 	if (WPFC.google_calendar_api_key && WPFC.google_calendar_ids) {
 		for (var i = 0; i < WPFC.google_calendar_ids.length; i++) {
 			var calendarId = WPFC.google_calendar_ids[i];
 			eventSources.push({googleCalendarId: calendarId});
 		}
 	}
+	*/
 
 	var fullcalendar_args = {
 		timeFormat: WPFC.timeFormat,
@@ -30,11 +32,11 @@ jQuery(document).ready( function($){
 		theme: WPFC.wpfc_theme,
 		firstDay: WPFC.firstDay,
 		editable: false,
-		googleCalendarApiKey: WPFC.google_calendar_api_key,
+		// Fetching Google Events from server instead // googleCalendarApiKey: WPFC.google_calendar_api_key,
 		eventSources: eventSources,
 		//eventRender: function(event, element) {
 		eventClick: function (event, jsEvent, view) {
-			if ((event.post_id > 0 || event.event_id) && WPFC.wpfc_dialog == 1) {
+			if ((event.event_source_type === 'facebook' || event.event_source_type === 'wordpress') && WPFC.wpfc_dialog == 1) {
 				var event_data = {action: 'wpfc_dialog_content', post_id: event.post_id, event_id: event.event_id};
 				$.ajax({
 					method: "POST",
@@ -74,7 +76,9 @@ jQuery(document).ready( function($){
 				}
 				var htmlEventDescription = event.description ? event.description.replace(/$/mg,'<br/>') : '';
 				var htmlDescription = htmlDate
-					+ '<a href="' + event.url + '" target="_blank">View Event on Google Calendar</a><br/><br/>'
+					+ '<a href="' + event.url + '" target="_blank">View Event on Google Calendar</a><br/>'
+					+ '<p><strong><a href="/?wpfc-ical=' + event.id  + '&event_source_type=' + event.event_source_type + '" target="_blank">Add to Calendar</a></strong></p>'
+					+ '<br/>'
 					+ '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">'
 					+ htmlEventDescription;
 

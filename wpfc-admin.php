@@ -136,6 +136,7 @@ class WPFC_Admin {
 								<?php
 								wpfc_options_input_text( __('Calendar API Key'), 'wpfc_google_calendar_api_key', 'Google Calendar API Key', '');
 								wpfc_options_textarea( __( 'Calendar IDs', 'wp-fullcalendar'), 'wpfc_google_calendar_ids', 'Google Calendar IDs (separated by white space; can be on separate lines).');
+								wpfc_options_input_text ( __( 'Refresh Interval', 'wp-fullcalendar'), 'wpfc_google_refresh_interval', 'Number of seconds to cache result of Google Calendar event fetch before trying again (set to 0 to disable caching and fetch every time)', '' );
 								?>
 							</table>
 							<hr/>

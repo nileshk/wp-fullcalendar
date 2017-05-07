@@ -7,6 +7,7 @@
 	],
 	"require": {
 		"facebook/graph-sdk": "^5.5",
-		"rb-cohen/ical-php": "dev-master"
+		"rb-cohen/ical-php": "dev-master",
+		"google/apiclient": "^2.0"
 	}
 }

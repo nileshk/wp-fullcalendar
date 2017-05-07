@@ -27,9 +27,13 @@ define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
 define("WPFC_FACEBOOK_TOKEN_QUERY_VARIABLE", "wpfc-facebook-token");
-
 // Include the required dependencies.
 require_once( 'vendor/autoload.php' );
+
+define('WPFC_GOOGLE_SCOPES', implode(' ', array(
+		Google_Service_Calendar::CALENDAR_READONLY)
+));
+
 
 use Ical\Feed;
 use Ical\Component\Calendar;
@@ -135,8 +139,8 @@ class WP_FullCalendar{
 		$js_vars['wpfc_theme'] = get_option('wpfc_theme_css') ? true:false;
 		$js_vars['wpfc_limit'] = get_option('wpfc_limit',3);
 		$js_vars['wpfc_limit_txt'] = get_option('wpfc_limit_txt','more ...');
-		$js_vars['google_calendar_api_key'] = get_option('wpfc_google_calendar_api_key', '');
-		$js_vars['google_calendar_ids'] = preg_split('/\s+/', get_option('wpfc_google_calendar_ids', ''));
+		//$js_vars['google_calendar_api_key'] = get_option('wpfc_google_calendar_api_key', '');
+		//$js_vars['google_calendar_ids'] = preg_split('/\s+/', get_option('wpfc_google_calendar_ids', ''));
 		//FC options
 		$js_vars['timeFormat'] = get_option('wpfc_timeFormat', 'h(:mm)t');
 		$js_vars['defaultView'] = get_option('wpfc_defaultView', 'month');
@@ -164,7 +168,6 @@ class WP_FullCalendar{
 		$_REQUEST['end'] = $_POST['end'] = date('Y-m-d', strtotime($_REQUEST['end']));
 
 		//initiate vars
-		$limit = get_option('wpfc_limit',3);
 		$fb_fetch_now = false;
 		$fb_last_fetch = intval(get_option('wpfc_facebook_last_fetch', -1));
 		if ($fb_last_fetch < 0) {
@@ -176,13 +179,10 @@ class WP_FullCalendar{
 			}
 		}
 		$items = $fb_fetch_now ? array() : get_option('wpfc_facebook_events', array());
-		$item_dates_more = array();
-		$item_date_counts = array();
 
 		$color = "#a8d144";
 
 		$facebook_events_enabled = get_option('wpfc_facebook_group_events', false);
-		// TODO Fetch Facebook events again if it's been a while
 		// TODO Fetch Facebook events when a request param instructs to
 		if ($facebook_events_enabled && empty($items)) {
 			$fb_app_id            = get_option('wpfc_facebook_app_id');
@@ -212,20 +212,81 @@ class WP_FullCalendar{
 					$event_end_time    = $graph_node['end_time'];
 					$event_id          = $graph_node['id'];
 
-					$item    = array(
-						"title"       => $event_name,
-						"description" => $event_description,
-						"color"       => $color,
-						"start"       => date( 'Y-m-d\TH:i:s', $event_start_time->getTimestamp() ),
-						"end"         => date( 'Y-m-d\TH:i:s', $event_end_time->getTimestamp() ),
-						"url"         => 'https://www.facebook.com/events/' . $event_id,
-						'event_id'    => $event_id
+					$item = array(
+						"id"                => $event_id,
+						"title"             => $event_name,
+						"description"       => $event_description,
+						"color"             => $color,
+						"start"             => date( 'Y-m-d\TH:i:s', $event_start_time->getTimestamp() ),
+						"end"               => date( 'Y-m-d\TH:i:s', $event_end_time->getTimestamp() ),
+						"url"               => 'https://www.facebook.com/events/' . $event_id,
+						'event_id'          => $event_id,
+						'event_source_type' => 'facebook',
+						'className'         => 'facebook-event'
 					);
 					$items[] = apply_filters( 'wpfc_ajax_post', $item, $post );
 				}
 			}
 			update_option( 'wpfc_facebook_events', $items );
 			update_option('wpfc_facebook_last_fetch', time());
+		}
+
+		$google_calendar_api_key = get_option('wpfc_google_calendar_api_key', null);
+		$google_calendar_ids_string = get_option('wpfc_google_calendar_ids', null);
+		if ($google_calendar_api_key && $google_calendar_ids_string) {
+
+			$google_fetch_now = false;
+			$google_last_fetch = intval(get_option('wpfc_facebook_last_fetch', -1));
+			if ($google_last_fetch < 0) {
+				$google_fetch_now = true;
+			} else {
+				$google_refresh_interval = intval(get_option('wpfc_facebook_refresh_interval', 36000)); // Default 36000 = 10 minutes
+				if ((time() - $google_last_fetch) > $google_refresh_interval) {
+					$google_fetch_now = true;
+				}
+			}
+
+			$google_items = $google_fetch_now ? array() : get_option('wpfc_google_events', array());
+			if (empty($google_items)) {
+				$google_client = new Google_Client();
+				$google_client->setApplicationName( 'wp-fullcalendar' );
+				$google_client->setScopes( WPFC_GOOGLE_SCOPES );
+				$google_client->setDeveloperKey( $google_calendar_api_key );
+				$google_service      = new Google_Service_Calendar( $google_client );
+				$google_calendar_ids = array_filter( preg_split( '/\s+/', get_option( 'wpfc_google_calendar_ids', '' ) ) );
+				foreach ( $google_calendar_ids as $google_calendar_id ) {
+					$results = $google_service->events->listEvents( $google_calendar_id );
+					if ( count( $results->getItems() ) > 0 ) {
+						foreach ( $results->getItems() as $event ) {
+							$start = $event->start->dateTime;
+							if ( empty( $start ) ) {
+								$start = $event->start->date;
+							}
+							$end = $event->end->dateTime;
+							if ( empty( $end ) ) {
+								$end = $event->end->date;
+							}
+							$item           = array(
+								"id"                => $event->id,
+								"title"             => $event->summary,
+								"description"       => $event->description,
+								"color"             => $color,
+								"start"             => $start,
+								"end"               => $end,
+								"url"               => $event->htmlLink,
+								'event_id'          => $event->id,
+								'allDay'            => $event->allDay,
+								'event_source_type' => 'google',
+								'className'         => 'google-event'
+							);
+							$google_items[] = $item;
+						}
+					}
+				}
+				update_option( 'wpfc_google_events', $google_items );
+				update_option( 'wpfc_google_last_fetch', time() );
+			}
+			$items = array_merge( $items, $google_items );
 		}
 
 		//echo json_encode(apply_filters('wpfc_ajax', $items));
@@ -284,20 +345,21 @@ class WP_FullCalendar{
 				$post_timestamp = strtotime( $post->post_date );
 				if ( empty( $item_date_counts[ $post_date ] ) || $item_date_counts[ $post_date ] < $limit ) {
 					$title                          = $post->post_title;
-					$item                           = array(
-						"title"   => $title,
-						"color"   => $color,
-						"start"   => date( 'Y-m-d\TH:i:s', $post_timestamp ),
-						"end"     => date( 'Y-m-d\TH:i:s', $post_timestamp ),
-						"url"     => get_permalink( $post->ID ),
-						'post_id' => $post->ID
+					$item = array(
+						"title"             => $title,
+						"color"             => $color,
+						"start"             => date( 'Y-m-d\TH:i:s', $post_timestamp ),
+						"end"               => date( 'Y-m-d\TH:i:s', $post_timestamp ),
+						"url"               => get_permalink( $post->ID ),
+						'post_id'           => $post->ID,
+						'event_source_type' => 'wordpress'
 					);
 					$items[]                        = apply_filters( 'wpfc_ajax_post', $item, $post );
 					$item_date_counts[ $post_date ] = ( ! empty( $item_date_counts[ $post_date ] ) ) ? $item_date_counts[ $post_date ] + 1 : 1;
 				} elseif ( empty( $item_dates_more[ $post_date ] ) ) {
 					$item_dates_more[ $post_date ] = 1;
 					$day_ending                    = $post_date . "T23:59:59";
-					//TODO archives not necesarrily working
+					//TODO archives not necessarily working
 					$more_array = array( "title"     => get_option( 'wpfc_limit_txt', 'more ...' ),
 										 "color"     => get_option( 'wpfc_limit_color', '#fbbe30' ),
 										 "start"     => $day_ending,
@@ -333,7 +395,7 @@ class WP_FullCalendar{
 					$content .= '<p><strong>Start Time:</strong>&nbsp;'.$item['start'].'</p>';
 					$content .= '<p><strong>End Time:</strong>&nbsp;'.$item['end'].'</p>';
 					$content .= '<p><strong><a href="'.$item['url'].'" target="_blank">View event on Facebook</a></strong></p>';
-					$content .= '<p><strong><a href="/?'.WPFC_QUERY_VARIABLE.'='.$event_id.'" target="_blank">Add to Calendar</a></strong></p>';
+					$content .= '<p><strong><a href="/?'.WPFC_QUERY_VARIABLE.'='.$event_id.'&event_source_type=facebook" target="_blank">Add to Calendar</a></strong></p>';
 					$content .= '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">';
 					$content .= '<div style="float:left; margin:0px 5px 5px 0px;">'.nl2br(htmlentities($item['description'])).'</div>';
 					break;
@@ -442,8 +504,16 @@ class WP_FullCalendar{
 	public static function wpfc_filter_query_vars( $vars ) {
 		if ( isset( $_GET[ WPFC_QUERY_VARIABLE ] ) ) {
 			$event_id = $_GET[ WPFC_QUERY_VARIABLE ];
+			$event_source_type = $_GET['event_source_type'];
 
-			$items = get_option('wpfc_facebook_events', array());
+			if ($event_source_type == 'facebook') {
+				$items = get_option( 'wpfc_facebook_events', array() );
+			} else if ($event_source_type = 'google') {
+				$items = get_option( 'wpfc_google_events', array() );
+			} else {
+				$items = [];
+				error_log('Unsupported event source type');
+			}
 			foreach ($items as $item) {
 				if ($item['event_id'] == $event_id) {
 
@@ -469,10 +539,9 @@ class WP_FullCalendar{
 					$feed->addCalendar( $calendar );
 
 					// Output the feed with appropriate HTTP header
-					$feed->download('facebook-event-'.$event_id.'.ics');
+					$feed->download($event_source_type.'-'.$event_id.'.ics');
 					die();
 				}
-				break;
 			}
 		} else if ( isset( $_GET[ WPFC_FACEBOOK_TOKEN_QUERY_VARIABLE ] ) ) {
 			if(!session_id()) {
