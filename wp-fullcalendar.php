@@ -180,8 +180,6 @@ class WP_FullCalendar{
 		}
 		$items = $fb_fetch_now ? array() : get_option('wpfc_facebook_events', array());
 
-		$color = "#a8d144";
-
 		$facebook_events_enabled = get_option('wpfc_facebook_group_events', false);
 		// TODO Fetch Facebook events when a request param instructs to
 		if ($facebook_events_enabled && empty($items)) {
@@ -222,7 +220,7 @@ class WP_FullCalendar{
 						"id"                => $event_id,
 						"title"             => $event_name,
 						"description"       => $event_description,
-						"color"             => $color,
+						"color"             => '#3b5998', // TODO Make this configurable
 						"start"             => $start_dt->format(DateTime::ISO8601),
 						"end"               => $end_dt->format(DateTime::ISO8601),
 						"url"               => 'https://www.facebook.com/events/' . $event_id,
@@ -277,7 +275,7 @@ class WP_FullCalendar{
 								"id"                => $event->id,
 								"title"             => $event->summary,
 								"description"       => $event->description,
-								"color"             => $color,
+								"color"             => '#4885ed',
 								"start"             => $start,
 								"end"               => $end,
 								"url"               => $event->htmlLink,
