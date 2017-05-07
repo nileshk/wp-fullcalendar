@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP FullCalendar
-Version: 2.0.0
+Version: 2.0.1
 Plugin URI: http://wordpress.org/extend/plugins/wp-fullcalendar/
 Description: Uses the jQuery FullCalendar plugin to create a stunning calendar view of events, posts and eventually other CPTs. Integrates well with Events Manager
 Author: Marcus Sykes
@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '2.0.0');
+define('WPFC_VERSION', '2.0.1');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
@@ -294,7 +294,9 @@ class WP_FullCalendar{
 				update_option( 'wpfc_google_events', $google_items );
 				update_option( 'wpfc_google_last_fetch', time() );
 			}
-			$items = array_merge( $items, $google_items );
+			if ($google_items && count($google_items) > 0) {
+				$items = array_merge( $items, $google_items );
+			}
 		}
 
 		//echo json_encode(apply_filters('wpfc_ajax', $items));
