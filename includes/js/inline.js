@@ -74,8 +74,14 @@ jQuery(document).ready( function($){
 					+'<strong>End:</strong> ' + event.end.format(dateFormat) + '<br/>';
 				}
 				htmlDate += '<br/>';
-				if (event.event_source_type === 'google' && event.location) { // TODO Handling Facebook location format
+				if (event.location) {
 					htmlDate += '<strong>Location: </strong>' + event.location + '<br/>';
+					if (event.lat && event.long) {
+						// http://maps.google.com/maps?&z=15&mrt=yp&t=k&q=27.9879012+86.9253141
+						htmlDate += '<a href="https://maps.google.com/maps?&z=18&mrt=yp&t=m&q=' + event.lat + '+' + event.long + '' + '" target="_blank">Open location in Google Maps</a><br/>';
+						// https://www.google.com/maps/@42.585444,13.007813,6z
+						// htmlDate += '<a href="https://www.google.com/maps/@' + event.lat + ',' + event.long + ',6z' + '" target="_blank">Open location in Google Maps</a><br/>';
+					}
 				}
 				htmlDate += '<br/>';
 				var htmlEventDescription = event.description ? event.description.replace(/$/mg,'<br/>') : '';

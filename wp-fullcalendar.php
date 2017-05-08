@@ -209,7 +209,17 @@ class WP_FullCalendar{
 					$event_start_time  = $graph_node['start_time'];
 					$event_end_time    = $graph_node['end_time'];
 					$event_id          = $graph_node['id'];
-					$event_location    = $graph_node['place'];
+					$place             = $graph_node['place'];
+
+					$event_location = $place['name'];
+					$latitude = null;
+					$longitude = null;
+					if ($place['location']) {
+						$place_location = $place['location'];
+						$event_location .= ', ' . $place_location['street'] . ', ' . $place_location['city'] . ', ' . $place_location['state'] . ', ' . $place_location['zip'];
+						$latitude = $place_location['latitude'];
+						$longitude = $place_location['longitude'];
+					}
 
 					$start_dt = DateTime::createFromFormat( 'U', $event_start_time->getTimestamp());
 					$start_dt->setTimezone(new DateTimeZone('America/New_York')); // TODO Configure time zone
@@ -226,6 +236,8 @@ class WP_FullCalendar{
 						"url"               => 'https://www.facebook.com/events/' . $event_id,
 						'event_id'          => $event_id,
 						'location'          => $event_location,
+						'lat'               => $latitude,
+						'long'              => $longitude,
 						'event_source_type' => 'facebook',
 						'className'         => 'facebook-event'
 					);
