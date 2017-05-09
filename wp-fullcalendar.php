@@ -543,7 +543,7 @@ class WP_FullCalendar{
 					// This calendar will contain our events
 					$calendar = new Calendar( 'wpfc-ical//v1' );
 
-					$event = new Event( 'uid-1@example' );
+					$event = new Event( $event_source_type . '-' . $item['id'] );
 					//$event->created( new DateTime( '2015-01-01' ) );
 					//$event->lastModified( new DateTime( '2015-01-05' ) );
 
