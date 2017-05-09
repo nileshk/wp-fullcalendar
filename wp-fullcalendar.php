@@ -558,6 +558,9 @@ class WP_FullCalendar{
 					$event->description( $item['description'] );
 					$event->allDay( false ); // TODO set this
 					$event->url( $item['url'] );
+					if (!is_null($item['location'])) {
+						$event->location($item['location']);
+					}
 
 					// Add this event to the calendar
 					$calendar->addEvent( $event );
