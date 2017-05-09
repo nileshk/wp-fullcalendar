@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP FullCalendar
-Version: 2.0.1
+Version: 2.0.2
 Plugin URI: http://wordpress.org/extend/plugins/wp-fullcalendar/
 Description: Uses the jQuery FullCalendar plugin to create a stunning calendar view of events, posts and eventually other CPTs. Integrates well with Events Manager
 Author: Marcus Sykes
@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '2.0.1');
+define('WPFC_VERSION', '2.0.2');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
@@ -209,12 +209,12 @@ class WP_FullCalendar{
 					$event_start_time  = $graph_node['start_time'];
 					$event_end_time    = $graph_node['end_time'];
 					$event_id          = $graph_node['id'];
-					$place             = $graph_node['place'];
+					$place             = $graph_node->getField('place');
 
-					$event_location = $place['name'];
+					$event_location = is_null($place) ? '' : $place['name'];
 					$latitude = null;
 					$longitude = null;
-					if ($place['location']) {
+					if (!is_null($place) && !is_null($place->getField('location'))) {
 						$place_location = $place['location'];
 						$event_location .= ', ' . $place_location['street'] . ', ' . $place_location['city'] . ', ' . $place_location['state'] . ', ' . $place_location['zip'];
 						$latitude = $place_location['latitude'];
