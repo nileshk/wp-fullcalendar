@@ -3,6 +3,8 @@ var wpfc_counts = {};
 jQuery(document).ready( function($){
 	var DIALOG_MAX_SIZE = 840;
 
+	var bootstrapLoaded = (typeof $().modal == 'function');
+
 	var eventSources = [{
 		url: WPFC.ajaxurl,
 		data: WPFC.data,
@@ -78,37 +80,48 @@ jQuery(document).ready( function($){
 					htmlDate += '<strong>Location: </strong>' + event.location + '<br/>';
 					if (event.lat && event.long) {
 						// http://maps.google.com/maps?&z=15&mrt=yp&t=k&q=27.9879012+86.9253141
-						htmlDate += '<a href="https://maps.google.com/maps?&z=18&mrt=yp&t=m&q=' + event.lat + '+' + event.long + '' + '" target="_blank">Open in map</a><br/>';
+						htmlDate += '<a href="https://maps.google.com/maps?&z=18&mrt=yp&t=m&q=' + event.lat + '+' + event.long + '' + '" target="_blank" class="btn btn-primary active" style="margin: 5px;" role="button" aria-pressed="true"><span class="fa fa-map-marker" aria-hidden="true"></span>&nbsp;&nbsp;Open in map</a>';
 						// https://www.google.com/maps/@42.585444,13.007813,6z
 						// htmlDate += '<a href="https://www.google.com/maps/@' + event.lat + ',' + event.long + ',6z' + '" target="_blank">Open location in Google Maps</a><br/>';
 					} else {
-						htmlDate += '<a href="https://maps.google.com/maps?&z=18&mrt=yp&t=m&q=' + encodeURIComponent(event.location) + '" target="_blank">Open in map</a><br/>';
+						htmlDate += '<a href="https://maps.google.com/maps?&z=18&mrt=yp&t=m&q=' + encodeURIComponent(event.location) + '" target="_blank" class="btn btn-primary active" style="margin: 5px;" role="button" aria-pressed="true"><span class="fa fa-map-marker" aria-hidden="true"></span>&nbsp;&nbsp;Open in map</a>';
 					}
+					htmlDate += !bootstrapLoaded ? "<br/>" : '&nbsp;';
 				}
-				htmlDate += '<br/>';
+				htmlDate += !bootstrapLoaded ? '<br/>' : '&nbsp;';
 				var htmlEventDescription = event.description ? event.description.replace(/$/mg,'<br/>') : '';
 				var viewEventLabel = "View Event";
+				var sourceTypeIcon = "";
 				if (event.event_source_type === 'google') {
 					viewEventLabel = "View Event on Google Calendar";
+					sourceTypeIcon = 'fa-google';
 				} else if (event.event_source_type === 'facebook') {
 					viewEventLabel = "View Event on Facebook";
+					sourceTypeIcon = 'fa-facebook-official';
 				}
 
 				var htmlDescription = htmlDate
-					+ '<a href="' + event.url + '" target="_blank">' + viewEventLabel + '</a><br/>'
-					+ '<br/>'
-					+ '<p><strong><a href="/?wpfc-ical=' + event.id  + '&event_source_type=' + event.event_source_type + '" target="_blank">Add to Calendar</a></strong></p>'
+					+ '<a href="' + event.url + '" target="_blank" class="btn btn-primary active" style="margin: 5px;" role="button" aria-pressed="true"><span class="fa ' + sourceTypeIcon + '" aria-hidden="true"></span>&nbsp;&nbsp;' + viewEventLabel + '</a>';
+				htmlDescription += !bootstrapLoaded ? '<br/><br/>' : '&nbsp;';
+				htmlDescription +=
+					'<a href="/?wpfc-ical=' + event.id  + '&event_source_type=' + event.event_source_type + '" target="_blank" class="btn btn-primary active" style="margin: 5px;" role="button" aria-pressed="true"><span class="fa fa-calendar-plus-o" aria-hidden="true"></span>&nbsp;&nbsp;Add to Calendar</a>' //
 					+ '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">'
 					+ htmlEventDescription;
 
-				$('#wpfc-event-dialog')
-					.html(htmlDescription)
-					.attr('title', event.title)
-					.dialog({
-						height: h,
-						width: w,
-						position: {my: "center", at: "center", of: window}
-					});
+				if (bootstrapLoaded) { // Use Bootstrap modal
+					$('#wpfc-event-dialog-title').text(event.title);
+					$('#wpfc-event-dialog-body').html(htmlDescription);
+					$('#wpfc-event-dialog').modal();
+				} else { // If Bootstrap not loaded, use jQuery UI dialog
+					$('#wpfc-event-dialog')
+						.html(htmlDescription)
+						.attr('title', event.title)
+						.dialog({
+							height: h,
+							width: w,
+							position: {my: "center", at: "center", of: window}
+						});
+				}
 			}
 			return false;
 		},

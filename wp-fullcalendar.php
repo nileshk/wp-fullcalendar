@@ -478,7 +478,20 @@ class WP_FullCalendar{
 				do_action('wpfc_calendar_search', self::$args);
 			?>
 		</div>
-		<div id="wpfc-event-dialog" title="Event" style="display:none;">
+		<div id="wpfc-event-dialog" title="Event" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 id="wpfc-event-dialog-title" class="modal-title">Event</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div id="wpfc-event-dialog-body" class="modal-body">
+					</div>
+					<!--<div class="modal-footer"></div>-->
+				</div>
+			</div>
 		</div>
 		<script type="text/javascript">
 			WPFC.data = { action : 'WP_FullCalendar'<?php
