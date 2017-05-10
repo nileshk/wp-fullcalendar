@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: WP FullCalendar
-Version: 2.0.2
+Version: 2.0.3
 Plugin URI: http://wordpress.org/extend/plugins/wp-fullcalendar/
 Description: Uses the jQuery FullCalendar plugin to create a stunning calendar view of events, posts and eventually other CPTs. Integrates well with Events Manager
 Author: Marcus Sykes
@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '2.0.2');
+define('WPFC_VERSION', '2.0.3');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
@@ -221,10 +221,12 @@ class WP_FullCalendar{
 						$longitude = $place_location['longitude'];
 					}
 
+					$time_zone = get_option('timezone_string');
+
 					$start_dt = DateTime::createFromFormat( 'U', $event_start_time->getTimestamp());
-					$start_dt->setTimezone(new DateTimeZone('America/New_York')); // TODO Configure time zone
+					$start_dt->setTimezone(new DateTimeZone($time_zone));
 					$end_dt = DateTime::createFromFormat( 'U', $event_end_time->getTimestamp());
-					$end_dt->setTimezone(new DateTimeZone('America/New_York')); // TODO Configure time zone
+					$end_dt->setTimezone(new DateTimeZone($time_zone));
 
 					$item = array(
 						"id"                => $event_id,
@@ -560,11 +562,12 @@ class WP_FullCalendar{
 					//$event->created( new DateTime( '2015-01-01' ) );
 					//$event->lastModified( new DateTime( '2015-01-05' ) );
 
-					// UTC time zone seems to make Apple Calendar and Finder preview happy
+					$time_zone = get_option('timezone_string');
+
 					$start_dt = new DateTime( $item['start'] );
-					$start_dt->setTimezone(new DateTimeZone("UTC"));
+					$start_dt->setTimezone(new DateTimeZone($time_zone));
 					$end_dt   = new DateTime( $item['end'] );
-					$end_dt->setTimezone(new DateTimeZone("UTC"));
+					$end_dt->setTimezone(new DateTimeZone($time_zone));
 
 					$event->between( $start_dt, $end_dt );
 					$event->summary( $item['title'] );
