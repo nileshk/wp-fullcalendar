@@ -86,9 +86,9 @@ jQuery(document).ready( function($){
 					} else {
 						htmlDate += '<a href="https://maps.google.com/maps?&z=18&mrt=yp&t=m&q=' + encodeURIComponent(event.location) + '" target="_blank" class="btn btn-primary active" style="margin: 5px;" role="button" aria-pressed="true"><span class="fa fa-map-marker" aria-hidden="true"></span>&nbsp;&nbsp;Open in map</a>';
 					}
-					htmlDate += !bootstrapLoaded ? "<br/>" : '&nbsp;';
+					htmlDate += !bootstrapLoaded ? "<br/>" : '';
 				}
-				htmlDate += !bootstrapLoaded ? '<br/>' : '&nbsp;';
+				htmlDate += !bootstrapLoaded ? '<br/>' : '';
 				var htmlEventDescription = event.description ? event.description.replace(/$/mg,'<br/>') : '';
 				var viewEventLabel = "View Event";
 				var sourceTypeIcon = "";
@@ -102,7 +102,7 @@ jQuery(document).ready( function($){
 
 				var htmlDescription = htmlDate
 					+ '<a href="' + event.url + '" target="_blank" class="btn btn-primary active" style="margin: 5px;" role="button" aria-pressed="true"><span class="fa ' + sourceTypeIcon + '" aria-hidden="true"></span>&nbsp;&nbsp;' + viewEventLabel + '</a>';
-				htmlDescription += !bootstrapLoaded ? '<br/><br/>' : '&nbsp;';
+				htmlDescription += !bootstrapLoaded ? '<br/><br/>' : '';
 				htmlDescription +=
 					'<a href="/?wpfc-ical=' + event.id  + '&event_source_type=' + event.event_source_type + '" target="_blank" class="btn btn-primary active" style="margin: 5px;" role="button" aria-pressed="true"><span class="fa fa-calendar-plus-o" aria-hidden="true"></span>&nbsp;&nbsp;Add to Calendar</a>' //
 					+ '<hr style="margin-top: 20px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px;">'
