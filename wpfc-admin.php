@@ -145,8 +145,8 @@ class WPFC_Admin {
 							<?php do_action('wpfc_admin_after_cpt_options'); ?>
 							<h2><?php _e('Calendar Options','wp-fullcalendar'); ?></h2>
 							<table class='form-table'>
-								<?php 
-								$available_views = apply_filters('wpfc_available_views',array('month'=>'Month','basicWeek'=>'Week (basic)','basicDay'=>'Day (basic)','agendaWeek'=>'Week (agenda)','agendaDay'=>'Day (agenda)'));
+								<?php
+								$available_views = apply_filters('wpfc_available_views',array('month'=>'Month','basicWeek'=>'Week (basic)','basicDay'=>'Day (basic)','agendaWeek'=>'Week (agenda)','agendaDay'=>'Day (agenda)','listMonth'=>'List (month)','listWeek'=>'List (week)','listYear'=>'List (year)','listDay'=>'List (day)'));
 								?>
 								<tr>
 									<th scope="row"><?php _e('Available Views','wp-fullcalendar'); ?></th>
