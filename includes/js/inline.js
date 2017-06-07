@@ -39,26 +39,9 @@ jQuery(document).ready( function($){
 		//eventRender: function(event, element) {
 		eventClick: function (event, jsEvent, view) {
 			if (event.event_source_type === 'wordpress' && WPFC.wpfc_dialog == 1) {
-				var event_data = {action: 'wpfc_dialog_content', post_id: event.post_id, event_id: event.event_id};
-				$.ajax({
-					method: "POST",
-					url: WPFC.ajaxurl,
-					data: event_data
-				}).done(function (data) {
-					var w = $(window).width();
-					if (w > DIALOG_MAX_SIZE) {
-						w = DIALOG_MAX_SIZE;
-					}
-					var h = $(window).height() * 0.8;
-					$('#wpfc-event-dialog')
-						.html(data)
-						.attr('title', event.title)
-						.dialog({
-							height: h,
-							width: w,
-							position: {my: "center", at: "center", of: window}
-						});
-				});
+				return true;
+			} else if (event.event_source_type === 'tribe') {
+				return true;
 			} else {
 				var w = $(window).width();
 				if (w > DIALOG_MAX_SIZE) {

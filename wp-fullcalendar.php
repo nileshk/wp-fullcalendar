@@ -399,6 +399,47 @@ class WP_FullCalendar{
 				}
 			}
 		}
+
+		/********************************************************************************
+		 * Modern Tribe "The Events Calendar"
+		 *
+		 * https://theeventscalendar.com/product/wordpress-events-calendar/
+		 ********************************************************************************/
+		if ( is_plugin_active( 'the-events-calendar/the-events-calendar.php' ) ) {
+
+			$args = array();
+
+			$defaults = array(
+				'post_type'            => Tribe__Events__Main::POSTTYPE,
+				'orderby'              => 'event_date',
+				'order'                => 'ASC',
+				//'posts_per_page'       => tribe_get_option( 'postsPerPage', 10 ),
+				'tribe_render_context' => 'default',
+			);
+			$args = wp_parse_args( $args, $defaults );
+
+			$the_query = new WP_Query( $args );
+
+			while ( $the_query->have_posts() ) {
+				$the_query->the_post();
+				$color              = "#449CD4";
+				$post_timestamp     = strtotime( $post->EventStartDate );
+				$post_end_timestamp = strtotime( $post->EventEndDate );
+
+				$title   = $post->post_title;
+				$item    = array(
+					"title"             => $title,
+					"color"             => $color,
+					"start"             => date( 'Y-m-d\TH:i:s', $post_timestamp ),
+					"end"               => date( 'Y-m-d\TH:i:s', $post_end_timestamp ),
+					"url"               => get_permalink( $post->ID ),
+					'post_id'           => $post->ID,
+					'event_source_type' => 'tribe'
+				);
+				$items[] = apply_filters( 'wpfc_ajax_post', $item, $post );
+			}
+		}
+
 		echo json_encode(apply_filters('wpfc_ajax', $items));
 		die(); //normally we'd wp_reset_postdata();
 	}
