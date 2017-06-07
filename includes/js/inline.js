@@ -37,6 +37,27 @@ jQuery(document).ready( function($){
 		// Fetching Google Events from server instead // googleCalendarApiKey: WPFC.google_calendar_api_key,
 		eventSources: eventSources,
 		//eventRender: function(event, element) {
+		eventMouseover: function(event, jsEvent) {
+			var tooltip = '<div class="tooltipevent card" style="padding:5px;;position:absolute;z-index:10001;">' +
+				'<div class="card-header">' + event.title + '</div>' +
+				'<div class="card-block" style="text-align: center"><small class="text-muted">(Click for details)</small></div>' +
+				// TODO Event description excerpt// '<div class="card-block">' + event.description + '</div>' +
+				'</div>';
+			var $tooltip = $(tooltip).appendTo('body');
+
+			$(this).mouseover(function(e) {
+				$(this).css('z-index', 10000);
+				$tooltip.fadeIn('500');
+				$tooltip.fadeTo('10', 1.9);
+			}).mousemove(function(e) {
+				$tooltip.css('top', e.pageY + 10);
+				$tooltip.css('left', e.pageX + 25);
+			});
+		},
+		eventMouseout: function(calEvent, jsEvent) {
+			$(this).css('z-index', 8);
+			$('.tooltipevent').remove();
+		},
 		eventClick: function (event, jsEvent, view) {
 			if (event.event_source_type === 'wordpress' && WPFC.wpfc_dialog == 1) {
 				return true;
