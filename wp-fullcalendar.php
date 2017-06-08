@@ -22,7 +22,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 */
 
-define('WPFC_VERSION', '2.0.3');
+define('WPFC_VERSION', '2.1.0');
 define('WPFC_UI_VERSION','1.11'); //jQuery 1.11.x
 define("WPFC_QUERY_VARIABLE", "wpfc-ical");
 define("WPFC_FACEBOOK_REQUEST_TOKEN_QUERY_VARIABLE", "wpfc-facebook-request-token");
@@ -427,14 +427,15 @@ class WP_FullCalendar{
 				$post_end_timestamp = strtotime( $post->EventEndDate );
 
 				$title   = $post->post_title;
-				$item    = array(
+				$item = array(
 					"title"             => $title,
 					"color"             => $color,
 					"start"             => date( 'Y-m-d\TH:i:s', $post_timestamp ),
 					"end"               => date( 'Y-m-d\TH:i:s', $post_end_timestamp ),
 					"url"               => get_permalink( $post->ID ),
 					'post_id'           => $post->ID,
-					'event_source_type' => 'tribe'
+					'event_source_type' => 'tribe',
+					'excerpt'           => tribe_events_get_the_excerpt( $post )
 				);
 				$items[] = apply_filters( 'wpfc_ajax_post', $item, $post );
 			}

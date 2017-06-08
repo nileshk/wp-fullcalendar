@@ -40,9 +40,14 @@ jQuery(document).ready( function($){
 		eventMouseover: function(event, jsEvent) {
 			var tooltip = '<div class="tooltipevent card" style="padding:5px;;position:absolute;z-index:10001;">' +
 				'<div class="card-header">' + event.title + '</div>' +
-				'<div class="card-block" style="text-align: center"><small class="text-muted">(Click for details)</small></div>' +
-				// TODO Event description excerpt// '<div class="card-block">' + event.description + '</div>' +
-				'</div>';
+				'<div class="card-block" style="text-align: center">';
+			if (event.excerpt) {
+				tooltip += '<small class="text-muted">';
+				tooltip += event.excerpt;
+				tooltip += '</small>';
+			}
+			tooltip += '<small class="text-muted" style="color:grey;"><i>...Click event for more details...</i></small></div>';
+			tooltip += '</div>';
 			var $tooltip = $(tooltip).appendTo('body');
 
 			$(this).mouseover(function(e) {
