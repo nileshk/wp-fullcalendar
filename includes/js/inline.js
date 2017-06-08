@@ -34,6 +34,15 @@ jQuery(document).ready( function($){
 		theme: WPFC.wpfc_theme,
 		firstDay: WPFC.firstDay,
 		editable: false,
+		views: {
+			listYear: {
+				validRange: function(nowDate) {
+					return {
+						start: nowDate.clone().subtract(7, 'days')
+					};
+				}
+			}
+		},
 		// Fetching Google Events from server instead // googleCalendarApiKey: WPFC.google_calendar_api_key,
 		eventSources: eventSources,
 		//eventRender: function(event, element) {
