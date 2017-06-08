@@ -50,6 +50,27 @@ jQuery(document).ready( function($){
 			var tooltip = '<div class="tooltipevent card" style="padding:5px;;position:absolute;z-index:10001;">' +
 				'<div class="card-header">' + event.title + '</div>' +
 				'<div class="card-block" style="text-align: center">';
+			var timeFormat = 'h:mma';
+			var dateFormat = 'MMMM Do YYYY, h:mma';
+			var dateFormatAllday = 'MMMM Do YYYY';
+			if (event.allDay) {
+				tooltip += event.start.format(dateFormatAllday) + '<br/>';
+			} else {
+				if (event.start) {
+					tooltip += event.start.format(dateFormat);
+					if (event.end) {
+						tooltip += ' - ';
+						var days_apart = Math.abs(event.end.diff(event.start, 'days'));
+						if (days_apart > 0) {
+							tooltip += event.end.format(dateFormat);
+						} else {
+							tooltip += event.end.format(timeFormat);
+						}
+
+					}
+					tooltip += '<br/>';
+				}
+			}
 			if (event.excerpt) {
 				tooltip += '<small class="text-muted">';
 				tooltip += event.excerpt;
